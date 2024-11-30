@@ -5,4 +5,5 @@ set(CMAKE_CXX_STANDARD 23)
 
 add_executable(board_games
         main.cpp
-        BoardGame_Classes.h)
+        BoardGame_Classes.h
+        MinMaxPlayer.h)
