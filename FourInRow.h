@@ -151,7 +151,6 @@ void Connect_Four_Player<T>::getmove(int& x, int& y) {
     cin >> x >> y;
 }
 
-// Constructor for X_O_Random_Player
 template <typename T>
 Connect_Four_Random_Player<T>::Connect_Four_Random_Player(T symbol) : RandomPlayer<T>(symbol) {
     this->dimension = 6;
