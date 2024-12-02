@@ -51,7 +51,8 @@ public:
             }
             return true;
         }
-            return false;
+        cout << "Invalid choice!\n";
+        return false;
     }
     /// Returns true if there is any winner
     bool is_win(){
@@ -116,4 +117,18 @@ public:
         }
     }
 };
+template <typename T>
+class Pyramid_randomPlayer : public RandomPlayer<T> {
+public:
+    Pyramid_randomPlayer(T symbol) : RandomPlayer<T>(symbol) {
+        this->dimension = 3;
+        this->name = "Random Computer Player";
+        srand(static_cast<unsigned int>(time(0)));  // Seed the random number generator
+    }
+    void getmove(int& x, int& y) override{
+        x = rand() % this->dimension;  // Random number between 0 and 2
+        y = rand() % this->dimension;
+    }
+};
+
 #endif //BOARD_GAMES_PYRAMID_TICTACTOE_H
