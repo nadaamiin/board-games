@@ -26,20 +26,21 @@ public:
         }
     }
     void display_board() override{
-        // Row 1
+        /// Row 1
         cout << setw(14) << "| " << this->board[0][2] << " |\n";
-        // Row 2
+        /// Row 2
         cout << setw(8) << "| " << this->board[1][1] << " | | "
              << this->board[1][2] << " | | " << this->board[1][3] << " |\n";
-        // Row 3
+        /// Row 3
         cout << "| " << this->board[2][0] << " | | " << this->board[2][1] << " | | " << this->board[2][2] << " | | "
              << this->board[2][3] << " | | " << this->board[2][4] << " |\n";
     }
     bool update_board(int x, int y, T symbol) override{
+        /// Check if the index the user will enter within the boundary and doesn't contain X, O already or not
         if(((x == 0 && y == 2) ||
            (x == 1 && y >= 1 && y <= 3) ||
            (x == 2 && y >= 0 && y <= 4)) &&
-           (this->board[x][y] != 'X' || this->board[x][y] != 'Y' || symbol == 0)){
+           (this->board[x][y] != 'X' && this->board[x][y] != 'O' || symbol == 0)){
             if (symbol == 0){
                 this->n_moves--;
                 this->board[x][y] = ' ';
@@ -50,6 +51,7 @@ public:
             }
             return true;
         }
+        cout << "Invalid choice!\n";
         return false;
     }
     /// Returns true if there is any winner
@@ -65,8 +67,10 @@ public:
             return true;
         }
         /// check last row
-        for (int i = 0; i < 3; ++i) {
-            if(this->board[2][i] == this->board[2][++i] && this->board[2][i] == this->board[2][++i] && this->board[2][i-=2] != ' '){
+        for (int i = 0; i < this->columns - 2; ++i) {
+            if (this->board[2][i] == this->board[2][i + 1] &&
+                this->board[2][i] == this->board[2][i + 2] &&
+                this->board[2][i] != ' ') {
                 return true;
             }
         }
@@ -92,6 +96,7 @@ public:
         int index;
         cout << "Enter the index of box you want to add in:";
         cin >> index;
+        /// Assign each number in the pyramid to its corresponding index
         if(index == 1){
             x = 0;
         }else if(index == 2 || index == 3 || index == 4){
@@ -112,4 +117,18 @@ public:
         }
     }
 };
+template <typename T>
+class Pyramid_randomPlayer : public RandomPlayer<T> {
+public:
+    Pyramid_randomPlayer(T symbol) : RandomPlayer<T>(symbol) {
+        this->dimension = 3;
+        this->name = "Random Computer Player";
+        srand(static_cast<unsigned int>(time(nullptr)));  // Seed the random number generator
+    }
+    void getmove(int& x, int& y) override{
+        x = rand() % this->dimension;  // Random number between 0 and 2
+        y = rand() % this->dimension;
+    }
+};
+
 #endif //BOARD_GAMES_PYRAMID_TICTACTOE_H
