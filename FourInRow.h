@@ -1,17 +1,121 @@
 #ifndef BOARD_GAMES_FOURINROW_H
 #define BOARD_GAMES_FOURINROW_H
-
 #include "BoardGame_Classes.h"
+#include <iostream>
+#include <iomanip>
+#include <cctype>
+using namespace std;
 
 template <typename T>
 class Connect_Four_Board:public Board<T> {
 public:
-    Connect_Four_Board ();
-    bool update_board (int x , int y , T symbol);
-    void display_board () ;
-    bool is_win() ;
-    bool is_draw();
-    bool game_is_over();
+    Connect_Four_Board (){
+        this->columns = 7;
+        this->rows = 6;
+        // Allocate memory for the rows (6 rows)
+        this->board = new char*[this->rows];
+        for (int i = 0; i < this->rows; i++) {
+            // Allocate memory for the columns in each row (7 columns)
+            this->board[i] = new char[this->columns];
+            // Initialize each cell to 0 (representing an empty state)
+            for (int j = 0; j < this->columns; j++) {
+                this->board[i][j] = 0;
+            }
+        }
+        // Initialize the number of moves to 0
+        this->n_moves = 0;
+
+    }
+
+    bool update_board(int x, int y, T symbol) override {
+        // Check if the column is valid
+        if (y < 0 || y >= this->columns) {
+            cerr << "Invalid column! \n";
+            return false;
+        }
+
+        // Search from the bottom of the column (row 5) to the top (row 0)
+        for (int row = 5; row >= 0; row--) {
+            if (this->board[row][y] == 0) {
+                this->board[row][y] = toupper(symbol);
+                this->n_moves++;
+                return true;
+            }
+        }
+
+        // If no empty spot is found
+        cerr << "Column is full! \n";
+        return false;
+    }
+
+
+    void display_board() override {
+        // Print the column indices
+        cout << "   ";
+        for (int j = 0; j < this->columns; j++) {
+            cout << setw(3) << j << "  "; // Column numbers at the top
+        }
+        cout << "\n";
+
+        // Print each row with its content
+        for (int i = 0; i < this->rows; i++) {
+            cout << i << " |"; // Row index at the start
+            for (int j = 0; j < this->columns; j++) {
+                char display_char = this->board[i][j] == 0 ? ' ' : this->board[i][j]; // Empty space for 0
+                cout << setw(3) << display_char << " |";
+            }
+            cout << "\n    " << "____________________________________" << "\n"; // Separator line
+        }
+        cout << endl;
+    }
+
+
+    bool is_win() override{
+        // Check rows and columns
+        for (int i = 0; i < this->rows; i++) {
+            for (int j = 0; j < this->columns - 3; j++) {
+                // Check row
+                if (this->board[i][j] == this->board[i][j+1] && this->board[i][j+1] == this->board[i][j+2] &&
+                    this->board[i][j+2] == this->board[i][j+3] && this->board[i][j] != 0) {
+                    return true;
+                }
+            }
+        }
+
+        for (int j = 0; j < this->columns; j++) {
+            for (int i = 0; i < this->rows - 3; i++) {
+                // Check column
+                if (this->board[i][j] == this->board[i+1][j] && this->board[i+1][j] == this->board[i+2][j] &&
+                    this->board[i+2][j] == this->board[i+3][j] && this->board[i][j] != 0) {
+                    return true;
+                }
+            }
+        }
+
+        // Check diagonals
+        for (int i = 0; i < this->rows - 3; i++) {
+            for (int j = 0; j < this->columns - 3; j++) {
+                // Principal diagonal
+                if (this->board[i][j] == this->board[i+1][j+1] && this->board[i+1][j+1] == this->board[i+2][j+2] &&
+                    this->board[i+2][j+2] == this->board[i+3][j+3] && this->board[i][j] != 0) {
+                    return true;
+                }
+                // Bottom-left to top-right
+                if (this->board[i+3][j] == this->board[i+2][j+1] && this->board[i+2][j+1] == this->board[i+1][j+2] &&
+                    this->board[i+1][j+2] == this->board[i][j+3] && this->board[i+3][j] != 0) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+    bool is_draw() override{
+        return (this->n_moves == 42 && !is_win());
+    }
+    bool game_is_over() override{
+        return is_win() || is_draw();
+    }
 
 };
 
@@ -30,125 +134,14 @@ public:
     void getmove(int &x, int &y) ;
 };
 
-//--------------------------------------- IMPLEMENTATION
-
-#include <iostream>
-#include <iomanip>
-#include <cctype>
-
-using namespace std;
-
-template <typename T>
-Connect_Four_Board<T>::Connect_Four_Board() {
-    this->columns = 7;
-    this->rows = 6;
-    // Allocate memory for the rows (6 rows)
-    this->board = new char*[this->rows];
-    for (int i = 0; i < this->rows; i++) {
-        // Allocate memory for the columns in each row (7 columns)
-        this->board[i] = new char[this->columns];
-        // Initialize each cell to 0 (representing an empty state)
-        for (int j = 0; j < this->columns; j++) {
-            this->board[i][j] = 0;
-        }
-    }
-    // Initialize the number of moves to 0
-    this->n_moves = 0;
-}
-
-template <typename T>
-bool Connect_Four_Board<T>::update_board(int x, int y, T mark) {
-    // Only update if move is valid
-    if (!(x < 0 || x >= this->rows || y < 0 || y >= this->columns) && (this->board[x][y] == 0|| mark == 0)) {
-        if (mark == 0){
-            this->n_moves--;
-            this->board[x][y] = 0;
-        }
-        else {
-            this->n_moves++;
-            this->board[x][y] = toupper(mark);
-        }
-
-        return true;
-    }
-    return false;
-}
-
-// Display the board and the pieces on it
-template <typename T>
-void Connect_Four_Board<T>::display_board() {
-    for (int i = 0; i < this->rows; i++) {
-        cout << "\n| ";
-        for (int j = 0; j < this->columns; j++) {
-            cout << "(" << i << "," << j << ")";
-            cout << setw(2) << this->board[i][j] << " |";
-        }
-        cout << "\n-----------------------------";
-    }
-    cout << endl;
-}
-
-template <typename T>
-bool Connect_Four_Board<T>::is_win() {
-    // Check rows and columns
-    for (int i = 0; i < this->rows; i++) {
-        for (int j = 0; j < this->columns - 3; j++) {
-            // Check row
-            if (this->board[i][j] == this->board[i][j+1] && this->board[i][j+1] == this->board[i][j+2] &&
-                this->board[i][j+2] == this->board[i][j+3] && this->board[i][j] != 0) {
-                return true;
-            }
-        }
-    }
-
-    for (int j = 0; j < this->columns; j++) {
-        for (int i = 0; i < this->rows - 3; i++) {
-            // Check column
-            if (this->board[i][j] == this->board[i+1][j] && this->board[i+1][j] == this->board[i+2][j] &&
-                this->board[i+2][j] == this->board[i+3][j] && this->board[i][j] != 0) {
-                return true;
-            }
-        }
-    }
-
-    // Check diagonals
-    for (int i = 0; i < this->rows - 3; i++) {
-        for (int j = 0; j < this->columns - 3; j++) {
-            // Principal diagonal
-            if (this->board[i][j] == this->board[i+1][j+1] && this->board[i+1][j+1] == this->board[i+2][j+2] &&
-                this->board[i+2][j+2] == this->board[i+3][j+3] && this->board[i][j] != 0) {
-                return true;
-            }
-            // Bottom-left to top-right
-            if (this->board[i+3][j] == this->board[i+2][j+1] && this->board[i+2][j+1] == this->board[i+1][j+2] &&
-                this->board[i+1][j+2] == this->board[i][j+3] && this->board[i+3][j] != 0) {
-                return true;
-            }
-        }
-    }
-
-    return false;
-}
-
-
-// Return true if 9 moves are done and no winner
-template <typename T>
-bool Connect_Four_Board<T>::is_draw() {
-    return (this->n_moves == 42 && !is_win());
-}
-
-template <typename T>
-bool Connect_Four_Board<T>::game_is_over() {
-    return is_win() || is_draw();
-}
-
 template <typename T>
 Connect_Four_Player<T>::Connect_Four_Player(string name, T symbol) : Player<T>(name, symbol) {}
 
 template <typename T>
 void Connect_Four_Player<T>::getmove(int& x, int& y) {
-    cout << "\nPlease enter your move x (0 - 5)\n and y (0 - 6): \n";
-    cin >> x >> y;
+    cout << "\nPlease enter your move by specifying the column (0-6): \n";
+    cin >> y;
+
 }
 
 template <typename T>
