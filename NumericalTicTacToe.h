@@ -26,16 +26,11 @@ public:
         }
         this->n_moves = 0;
     }
+    bool update_board(int x, int y, T symbol) override {
+        int number;
+        cout << "\nPlease enter the number you want to add:\n ";
+        cin >> number;
 
-    ~Numerical_TicTacToe_Board() {
-        for (int i = 0; i < this->rows; i++) {
-            delete[] this->board[i];
-        }
-        delete[] this->board;
-    }
-
-
-    bool update_board(int x, int y, T number) override {
         if (x < 0 || x >= this->rows || y < 0 || y >= this->columns) {
             cerr << "Invalid move! Position out of bounds.\n";
             return false;
@@ -81,7 +76,7 @@ public:
                     cout << setw(3) << this->board[i][j] << " |";
                 }
             }
-            cout << "\n    " << string(this->columns * 6, '_') << "\n";
+            cout << "\n    " << "-----------------" << "\n";
         }
         cout << endl;
     }
@@ -130,21 +125,16 @@ public:
 template <typename T>
 class Numerical_TicTacToe_Player : public Player<T> {
 public:
-    Numerical_TicTacToe_Player(string name, T symbol);
+    Numerical_TicTacToe_Player(string name, T symbol) : Player<T>(name, symbol) {}
 
-    void getmove(int& x, int& y);
+    void getmove(int& x, int& y)override{
+        cout << "\nPlease enter your index (row and column, space-separated):\n ";
+        cin >> x >> y;
+    }
+
 };
 
-template <typename T>
-Numerical_TicTacToe_Player<T>::Numerical_TicTacToe_Player(string name, T symbol) : Player<T>(name, symbol) {}
-
-template <typename T>
-void Numerical_TicTacToe_Player<T>::getmove(int& x, int& y) {
-    cout << "\nPlease enter your index (row and column, space-separated): ";
-    cin >> x >> y;
-}
-
-template <typename T>
+/*template <typename T>
 class Numerical_TicTacToe_Random_Player : public RandomPlayer<T> {
 public:
     Numerical_TicTacToe_Random_Player(T symbol);
@@ -163,6 +153,6 @@ template <typename T>
 void Numerical_TicTacToe_Random_Player<T>::getmove(int& x, int& y) {
     x = rand() % this->dimension;
     y = rand() % this->dimension;
-}
+}*/
 
 #endif // BOARD_GAMES_NUMERICALTICTACTOE_H
