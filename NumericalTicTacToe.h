@@ -34,6 +34,7 @@ public:
         delete[] this->board;
     }
 
+
     bool update_board(int x, int y, T number) override {
         if (x < 0 || x >= this->rows || y < 0 || y >= this->columns) {
             cerr << "Invalid move! Position out of bounds.\n";
