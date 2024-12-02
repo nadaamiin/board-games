@@ -65,8 +65,10 @@ public:
             return true;
         }
         /// check last row
-        for (int i = 0; i < 3; ++i) {
-            if(this->board[2][i] == this->board[2][++i] && this->board[2][i] == this->board[2][++i] && this->board[2][i-=2] != ' '){
+        for (int i = 0; i < this->columns - 2; ++i) {
+            if (this->board[2][i] == this->board[2][i + 1] &&
+                this->board[2][i] == this->board[2][i + 2] &&
+                this->board[2][i] != ' ') {
                 return true;
             }
         }
