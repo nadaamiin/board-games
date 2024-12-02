@@ -86,6 +86,30 @@ public:
 
 template <typename T>
 class Pyramid_player : public Player<T>{
-
+public:
+    Pyramid_player(string name, T symbol) : Player<T>(name, symbol){}
+    void getmove(int& x, int& y) override{
+        int index;
+        cout << "Enter the index of box you want to add in:";
+        cin >> index;
+        if(index == 1){
+            x = 0;
+        }else if(index == 2 || index == 3 || index == 4){
+            x = 1;
+        }else if(index == 5 || index == 6 || index == 7 || index == 8 || index == 9){
+            x = 2;
+        }
+        if(index == 5){
+            y = 0;
+        }else if(index == 1 || index == 3 || index == 7){
+            y = 2;
+        }else if(index == 6 || index == 2){
+            y = 1;
+        }else if(index == 8 || index == 4){
+            y = 3;
+        }else if(index == 9){
+            y = 4;
+        }
+    }
 };
 #endif //BOARD_GAMES_PYRAMID_TICTACTOE_H
