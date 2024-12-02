@@ -123,7 +123,7 @@ public:
     Pyramid_randomPlayer(T symbol) : RandomPlayer<T>(symbol) {
         this->dimension = 3;
         this->name = "Random Computer Player";
-        srand(static_cast<unsigned int>(time(0)));  // Seed the random number generator
+        srand(static_cast<unsigned int>(time(nullptr)));  // Seed the random number generator
     }
     void getmove(int& x, int& y) override{
         x = rand() % this->dimension;  // Random number between 0 and 2
