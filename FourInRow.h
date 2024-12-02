@@ -6,6 +6,7 @@
 #include <cctype>
 using namespace std;
 
+
 template <typename T>
 class Connect_Four_Board:public Board<T> {
 public:
