@@ -6,9 +6,9 @@
 
 using namespace std;
 template <typename T>
-class PyramidTicTacToc : public Board<T> {
+class PyramidTicTacToe : public Board<T> {
 public:
-    PyramidTicTacToc() {
+    PyramidTicTacToe() {
         this->rows = 3;
         this->columns = 5;
         int count = 1;
@@ -84,7 +84,7 @@ public:
 
     /// Return true if the game is over
     bool game_is_over(){
-        return is_win() || is_draw();
+        return (is_win() || is_draw());
     }
 };
 
