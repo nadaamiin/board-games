@@ -5,12 +5,12 @@
 #include <random>
 #include <ctime>
 
-//Player<char>* winner_p[2];
+Player<char>* globalPlayers[2];
 
 template <typename T>
 class Tic_Tac_Toe_Board  : public Board<char>{
 private:
-    Player<char>* players[2];  // Add this member to the class
+    //Player<char>* players[2];  // Add this member to the class
 
 public:
 
@@ -35,15 +35,10 @@ public:
             delete[] this->board[i];
         }
         delete[] this->board;
-        // Optionally, reset player pointers to avoid dangling pointers
-        players[0] = nullptr;
-        players[1] = nullptr;
-    }
 
-    // Method to set players
-    void setPlayers(Player<char>* player1, Player<char>* player2) {
-        this->players[0] = player1;
-        this->players[1] = player2;
+        globalPlayers[0] = nullptr;
+        globalPlayers[1] = nullptr;
+
     }
 
 
@@ -137,11 +132,7 @@ public:
             if (count_p1 > count_p2 ) {
                 cout<<  "player 1 wins!" << endl;
                 // Access and update player names
-                string winner_name = players[0]->getname();  // Get Player 1's name
-                string& loser_name = const_cast<string&>(static_cast<const string&>(players[1]->getname()));
-
-                loser_name = winner_name; // Set Player 2's name to Player 1's name
-
+                *globalPlayers[1] = *globalPlayers[0];  // This copies the entire player object
                 return true;
             }
             else if(count_p1 < count_p2){

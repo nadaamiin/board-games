@@ -71,12 +71,12 @@ int main() {
     players[0]->setBoard(B);
     players[1]->setBoard(B);
 
-    B->setPlayers(players[0], players[1]);
+    //B->setPlayers(players[0], players[1]);
 
     // Create the game manager and run the game
     GameManager<char> ttt_game(B, players);
-    //winner_p[0] = players[0];
-    //winner_p[1] = players[1];
+    globalPlayers[0] = players[0];
+    globalPlayers[1] = players[1];
 
     ttt_game.run();
 
