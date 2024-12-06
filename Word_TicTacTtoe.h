@@ -37,7 +37,8 @@ public:
     }
     bool update_board(int x, int y, T symbol){
         // Only update if move is valid
-        if (!(x < 0 || x >= this->rows || y < 0 || y >= this->columns) && (this->board[x][y] == ' ' || symbol == 0)) {
+        if (!(x < 0 || x >= this->rows || y < 0 || y >= this->columns) && (this->board[x][y] == ' ' ||
+        isdigit(this->board[x][y]) || symbol == 0)) {
             if (symbol == 0){
                 this->n_moves--;
                 this->board[x][y] = ' ';
@@ -57,7 +58,7 @@ public:
 
         if (!inputFile) { // Check if the file is successfully opened
             cerr << "Error opening file!" << endl;
-            return 1;
+            return false;
         }
 
         string line;
@@ -68,43 +69,42 @@ public:
         }
         inputFile.close(); // Close the file
 
-        string word;
         // Check rows and columns
         for (int i = 0; i < this->rows; i++) {
-            word = this->board[i][0] + this->board[i][1] + this->board[i][2];
-            auto it = dataSet.find(word);
-            // Check if the element was found
-            if (it != dataSet.end()) {
-                return true;
+            string word = "";
+            for (int j = 0; j < this->columns; j++) {
+                word += this->board[i][j];
             }
-            return false;
-
+            if (dataSet.find(word) != dataSet.end()) {
+                return true; // Word found in dictionary
+            }
         }
         for (int j = 0; j < this->columns; j++) {
-            word = this->board[0][j] + this->board[1][j] + this->board[2][j];
-            auto it = dataSet.find(word);
-            // Check if the element was found
-            if (it != dataSet.end()) {
-                return true;
+            string word = "";
+            for (int i = 0; i < this->rows; i++) {
+                word += this->board[i][j];
             }
-            return false;
+            if (dataSet.find(word) != dataSet.end()) {
+                return true; // Word found in dictionary
+            }
+        }
+        string diagonal = "";
+        for (int i = 0; i < this->rows; i++) {
+            diagonal += this->board[i][i];
+        }
+        if (dataSet.find(diagonal) != dataSet.end()) {
+            return true; // Word found in dictionary
+        }
 
+        diagonal = "";
+        for (int i = 0; i < this->rows; i++) {
+            diagonal += this->board[i][this->columns - i - 1];
         }
-        word = this->board[0][0] + this->board[1][1] + this->board[2][2];
-        auto it1 = dataSet.find(word);
-        // Check if the element was found
-        if (it1 != dataSet.end()) {
-            return true;
+        if (dataSet.find(diagonal) != dataSet.end()) {
+            return true; // Word found in dictionary
         }
-        return false;
 
-        word = this->board[0][2] + this->board[1][1] + this->board[2][0];
-        auto it2 = dataSet.find(word);
-        // Check if the element was found
-        if (it2 != dataSet.end()) {
-            return true;
-        }
-        return false;
+        return false; // No match found
     }
     bool is_draw(){
         return (this->n_moves == 9 && !is_win());
@@ -122,6 +122,10 @@ public:
         char letter;
         cout << "Enter the character you want to add:";
         cin >> letter;
+        while(!isalpha(letter)){
+            cout << "Enter a character please:";
+            cin >> letter;
+        }
         cout << "Enter the index of box you want to add in:";
         cin >> index;
         /// Assign each number in the board to its corresponding index
@@ -135,9 +139,9 @@ public:
         if(index == 1 || index == 4 || index == 7){
             y = 0;
         }else if(index == 2 || index == 5 || index == 8){
-            y = 2;
-        }else if(index == 3 || index == 6 || index == 9){
             y = 1;
+        }else if(index == 3 || index == 6 || index == 9){
+            y = 2;
         }
         this->symbol = letter;
     }
@@ -148,9 +152,10 @@ public:
     Word_randomPlayer(T symbol) : RandomPlayer<T>(symbol) {
         this->dimension = 3;
         this->name = "Random Computer Player";
-        srand(static_cast<unsigned int>(time(nullptr)));  // Seed the random number generator
+        srand(static_cast<unsigned int>(time(0)));  // Seed the random number generator
     }
     void getmove(int& x, int& y) override{
+        this->symbol = 'A' + rand() % 26;
         x = rand() % this->dimension;  // Random number between 0 and 2
         y = rand() % this->dimension;
     }

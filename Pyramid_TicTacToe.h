@@ -51,7 +51,6 @@ public:
             }
             return true;
         }
-        cout << "Invalid choice!\n";
         return false;
     }
     /// Returns true if there is any winner
@@ -96,6 +95,10 @@ public:
         int index;
         cout << "Enter the index of box you want to add in:";
         cin >> index;
+        while(!isdigit(index)){
+            cout << "Enter a number please:";
+            cin >> index;
+        }
         /// Assign each number in the pyramid to its corresponding index
         if(index == 1){
             x = 0;
