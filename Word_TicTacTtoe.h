@@ -4,7 +4,7 @@
 #include <iostream>
 #include <iomanip>
 #include <fstream>
-#include <set>
+#include <unordered_set>
 #include "BoardGame_Classes.h"
 
 using namespace std;
@@ -53,7 +53,7 @@ public:
         return false;
     }
     bool is_win(){
-        set<string> dataSet; // Create a set to store unique lines
+        unordered_set<string> dataSet; // Create a set to store unique lines
         ifstream inputFile("dic.txt"); // Open the file
 
         if (!inputFile) { // Check if the file is successfully opened
