@@ -29,47 +29,35 @@ public:
     bool update_board(int x, int y, T symbol) override {
         // Validate position
         if (x < 0 || x >= this->rows || y < 0 || y >= this->columns) {
-            cerr << "Invalid move! Position out of bounds.\n";
+            //cerr << "Invalid move! Position out of bounds.\n";
             return false;
         }
         if (this->board[x][y] != 0) {
-            cerr << "Invalid move! Cell already occupied.\n";
+            //cerr << "Invalid move! Cell already occupied.\n";
             return false;
         }
-
-        // Handle the 'mark' situation and board update
-        char mark = tolower(symbol); // Ensure symbol is treated as a character (for case handling)
-
-        // If mark is 0, undo the previous move
-        if (mark == 0) {
-            this->n_moves--; // Decrement move count
-            this->board[x][y] = 0; // Reset the cell to empty
-        }
-            // If mark is not 0, continue with player move
-        else {
-            // Player 1's turn
-            if (this->n_moves % 2 == 0) {
-                if (find(player1_values.begin(), player1_values.end(), symbol) != player1_values.end()) {
-                    this->board[x][y] = toupper(symbol); // Make sure the symbol is uppercase
-                    player1_values.erase(remove(player1_values.begin(), player1_values.end(), symbol), player1_values.end());
-                    this->n_moves++;
-                    return true;
-                } else {
-                    cerr << "Invalid move! Number not allowed or already used by Player 1.\n";
-                    return false;
-                }
+        // Player 1's turn
+        if (this->n_moves % 2 == 0) {
+            if (find(player1_values.begin(), player1_values.end(), symbol) != player1_values.end()) {
+                this->board[x][y] = symbol; // Make sure the symbol is uppercase
+                player1_values.erase(remove(player1_values.begin(), player1_values.end(), symbol), player1_values.end());
+                this->n_moves++;
+                return true;
+            } else {
+                //cerr << "Invalid move! Number not allowed or already used by Player 1.\n";
+                return false;
             }
-                // Player 2's turn
-            else {
-                if (find(player2_values.begin(), player2_values.end(), symbol) != player2_values.end()) {
-                    this->board[x][y] = toupper(symbol); // Make sure the symbol is uppercase
-                    player2_values.erase(remove(player2_values.begin(), player2_values.end(), symbol), player2_values.end());
-                    this->n_moves++;
-                    return true;
-                } else {
-                    cerr << "Invalid move! Number not allowed or already used by Player 2.\n";
-                    return false;
-                }
+        }
+            // Player 2's turn
+        else {
+            if (find(player2_values.begin(), player2_values.end(), symbol) != player2_values.end()) {
+                this->board[x][y] = symbol; // Make sure the symbol is uppercase
+                player2_values.erase(remove(player2_values.begin(), player2_values.end(), symbol), player2_values.end());
+                this->n_moves++;
+                return true;
+            } else {
+                //cerr << "Invalid move! Number not allowed or already used by Player 2.\n";
+                return false;
             }
         }
     }
@@ -101,7 +89,7 @@ public:
         // Check rows and columns
         for (int i = 0; i < this->rows; i++) {
             if (this->board[i][0] + this->board[i][1] + this->board[i][2] == 15
-            &&(this->board[i][0] != 0 && this->board[i][1] != 0 && this->board[i][2] != 0)) {
+                &&(this->board[i][0] != 0 && this->board[i][1] != 0 && this->board[i][2] != 0)) {
                 return true;
             }
         }
@@ -114,9 +102,9 @@ public:
 
         // Check diagonals
         if ((this->board[0][0] + this->board[1][1] + this->board[2][2] == 15 &&
-        (this->board[0][0] != 0 && this->board[1][1] != 0 && this->board[2][2] != 0 )) ||
-        (this->board[0][2] + this->board[1][1] + this->board[2][0] == 15 &&
-        (this->board[0][2] != 0 && this->board[1][1] != 0) &&this->board[2][0] != 0)) {
+             (this->board[0][0] != 0 && this->board[1][1] != 0 && this->board[2][2] != 0 )) ||
+            (this->board[0][2] + this->board[1][1] + this->board[2][0] == 15 &&
+             (this->board[0][2] != 0 && this->board[1][1] != 0) &&this->board[2][0] != 0)) {
             return true;
         }
 
@@ -163,22 +151,18 @@ Numerical_TicTacToe_Random_Player<T>::Numerical_TicTacToe_Random_Player(T symbol
 }
 
 template <typename T>
-void Numerical_TicTacToe_Random_Player<T>::getmove(int& x, int& y) {
+void Numerical_TicTacToe_Random_Player<T>::getmove(int& x, int& y){
+    vector<int> even_numbers = {2, 4, 6, 8};
+    int randomNumber;
+
+    randomNumber = even_numbers[rand() % even_numbers.size()];
+
     x = rand() % this->dimension;
     y = rand() % this->dimension;
 
-    vector<int> even_numbers = {2, 4, 6, 8};
-    static vector<int> used_numbers;
-    int randomNumber;
-
-    do {
-        randomNumber = even_numbers[rand() % even_numbers.size()];
-    } while (find(used_numbers.begin(), used_numbers.end(), randomNumber) != used_numbers.end());
-
-    cout << "Random number selected: " << randomNumber << endl;
-
+    // Store the number as used
     this->symbol = randomNumber;
-    used_numbers.push_back(randomNumber);
+
 }
 
 #endif // BOARD_GAMES_NUMERICALTICTACTOE_H
