@@ -6,9 +6,9 @@
 
 using namespace std;
 template <typename T>
-class PyramidTicTacToc : public Board<T> {
+class PyramidTicTacToe : public Board<T> {
 public:
-    PyramidTicTacToc() {
+    PyramidTicTacToe() {
         this->rows = 3;
         this->columns = 5;
         int count = 1;
@@ -51,7 +51,6 @@ public:
             }
             return true;
         }
-        cout << "Invalid choice!\n";
         return false;
     }
     /// Returns true if there is any winner
@@ -84,7 +83,7 @@ public:
 
     /// Return true if the game is over
     bool game_is_over(){
-        return is_win() || is_draw();
+        return (is_win() || is_draw());
     }
 };
 
@@ -96,6 +95,10 @@ public:
         int index;
         cout << "Enter the index of box you want to add in:";
         cin >> index;
+        while(!isdigit(index)){
+            cout << "Enter a number please:";
+            cin >> index;
+        }
         /// Assign each number in the pyramid to its corresponding index
         if(index == 1){
             x = 0;
@@ -123,7 +126,7 @@ public:
     Pyramid_randomPlayer(T symbol) : RandomPlayer<T>(symbol) {
         this->dimension = 3;
         this->name = "Random Computer Player";
-        srand(static_cast<unsigned int>(time(nullptr)));  // Seed the random number generator
+        srand(static_cast<unsigned int>(time(0)));  // Seed the random number generator
     }
     void getmove(int& x, int& y) override{
         x = rand() % this->dimension;  // Random number between 0 and 2
