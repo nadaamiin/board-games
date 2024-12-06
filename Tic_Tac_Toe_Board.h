@@ -5,13 +5,15 @@
 #include <random>
 #include <ctime>
 
+//Player<char>* winner_p[2];
+
 template <typename T>
-class Tic_Tac_Toe_Board  : public Board<char> {
+class Tic_Tac_Toe_Board  : public Board<char>{
 private:
-    int last_x = -1;  // Invalid coordinate initially
-    int last_y = -1;  // Invalid coordinate initially
+    Player<char>* players[2];  // Add this member to the class
 
 public:
+
     Tic_Tac_Toe_Board(){
         rows = 5;
         columns = 5;
@@ -33,7 +35,17 @@ public:
             delete[] this->board[i];
         }
         delete[] this->board;
+        // Optionally, reset player pointers to avoid dangling pointers
+        players[0] = nullptr;
+        players[1] = nullptr;
     }
+
+    // Method to set players
+    void setPlayers(Player<char>* player1, Player<char>* player2) {
+        this->players[0] = player1;
+        this->players[1] = player2;
+    }
+
 
 
     // update_board implementation
@@ -120,22 +132,26 @@ public:
 
         if(n_moves == 24) {
             int count_p1 = playerCount('X');
-            cout<< count_p1 << endl;
             int count_p2 = playerCount('O');
-            cout<< count_p2 << endl;
 
             if (count_p1 > count_p2 ) {
+                cout<<  "player 1 wins!" << endl;
+                // Access and update player names
+                string winner_name = players[0]->getname();  // Get Player 1's name
+                string& loser_name = const_cast<string&>(static_cast<const string&>(players[1]->getname()));
 
-                cout<< "Player 1 is the Winner!" << endl;
+                loser_name = winner_name; // Set Player 2's name to Player 1's name
+
                 return true;
             }
             else if(count_p1 < count_p2){
                 cout<< "Player 2 is the Winner!" << endl;
                 return true;
             }
-            else
-                return false;
+
         }
+
+        return false;
     }
 
 
@@ -162,6 +178,12 @@ public:
     void getmove(int& x, int& y) override {
         cout << this->name << ", enter your move (row [0-4] col [0-4]): ";
         cin >> x >> y;
+
+    }
+
+    // Helper method to set the name
+    void setName(const string& newName) {
+        this->name = newName;
     }
 
 };
@@ -182,6 +204,13 @@ public:
         x = rand() % this->dimension;
         y = rand() % this->dimension;
     }
+
+    // Helper method to set the name
+    void setName(const string& newName) {
+        this->name = newName;
+    }
+
+
 };
 
 
