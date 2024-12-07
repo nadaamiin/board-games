@@ -4,6 +4,7 @@
 #include <iostream>
 #include <iomanip>
 #include <fstream>
+#include <algorithm>
 #include <unordered_set>
 #include "BoardGame_Classes.h"
 
@@ -72,35 +73,49 @@ public:
         // Check rows and columns
         for (int i = 0; i < this->rows; i++) {
             string word = "";
+            string rev_word = "";
             for (int j = 0; j < this->columns; j++) {
                 word += this->board[i][j];
+                rev_word += this->board[i][j];
             }
-            if (dataSet.find(word) != dataSet.end()) {
+            reverse(rev_word.begin(), rev_word.end());
+            if (dataSet.find(word) != dataSet.end() ||
+                dataSet.find(rev_word) != dataSet.end()) {
                 return true; // Word found in dictionary
             }
         }
         for (int j = 0; j < this->columns; j++) {
             string word = "";
+            string rev_word = "";
             for (int i = 0; i < this->rows; i++) {
                 word += this->board[i][j];
+                rev_word += this->board[i][j];
             }
-            if (dataSet.find(word) != dataSet.end()) {
+            reverse(rev_word.begin(), rev_word.end());
+            if (dataSet.find(word) != dataSet.end() ||
+            dataSet.find(rev_word) != dataSet.end()) {
                 return true; // Word found in dictionary
             }
         }
         string diagonal = "";
+        string rev_diagonal = "";
         for (int i = 0; i < this->rows; i++) {
             diagonal += this->board[i][i];
+            rev_diagonal += this->board[i][i];
         }
-        if (dataSet.find(diagonal) != dataSet.end()) {
+        if (dataSet.find(diagonal) != dataSet.end() ||
+            dataSet.find(rev_diagonal) != dataSet.end()) {
             return true; // Word found in dictionary
         }
 
         diagonal = "";
+        rev_diagonal = "";
         for (int i = 0; i < this->rows; i++) {
             diagonal += this->board[i][this->columns - i - 1];
+            rev_diagonal += this->board[i][this->columns - i - 1];
         }
-        if (dataSet.find(diagonal) != dataSet.end()) {
+        if (dataSet.find(diagonal) != dataSet.end() ||
+            dataSet.find(rev_diagonal) != dataSet.end()) {
             return true; // Word found in dictionary
         }
 
