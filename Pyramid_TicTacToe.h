@@ -38,8 +38,8 @@ public:
     bool update_board(int x, int y, T symbol) override{
         /// Check if the index the user will enter within the boundary and doesn't contain X, O already or not
         if(((x == 0 && y == 2) ||
-           (x == 1 && y >= 1 && y <= 3) ||
-           (x == 2 && y >= 0 && y <= 4)) &&
+            (x == 1 && y >= 1 && y <= 3) ||
+            (x == 2 && y >= 0 && y <= 4)) &&
            (this->board[x][y] != 'X' && this->board[x][y] != 'O' || symbol == 0)){
             if (symbol == 0){
                 this->n_moves--;
@@ -95,7 +95,7 @@ public:
         int index;
         cout << "Enter the index of box you want to add in:";
         cin >> index;
-        while(!isdigit(index)){
+        while(isalpha(index)){
             cout << "Enter a number please:";
             cin >> index;
         }
@@ -130,7 +130,7 @@ public:
     }
     void getmove(int& x, int& y) override{
         x = rand() % this->dimension;  // Random number between 0 and 2
-        y = rand() % this->dimension;
+        y = rand() % 5;
     }
 };
 
