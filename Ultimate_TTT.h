@@ -6,7 +6,7 @@
 #include "BoardGame_Classes.h"
 
 using namespace std;
-static int ind = 0;
+static int counter = 0;
 
 template <typename T>
 class Ultimate_TTT : public Board<T> {
@@ -28,7 +28,7 @@ public:
         }
     }
     void display_board() override{
-        if(ind % 2 == 0) {
+        if(counter % 2 == 0) {
             for (int i = 0; i < this->rows; i++) {
                 cout << "\n|";
                 for (int j = 0; j < this->columns; j++) {
@@ -73,7 +73,7 @@ public:
     }
     bool is_complete(){
         if(is_win()){
-            ind+=2;
+            counter+=2;
         }
     }
 
