@@ -62,8 +62,6 @@ public:
         }
     }
 
-
-
     void display_board() override {
         cout << "   ";
         for (int j = 0; j < this->columns; j++) {

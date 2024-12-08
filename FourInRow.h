@@ -124,7 +124,11 @@ template <typename T>
 class Connect_Four_Player : public Player<T> {
 public:
     Connect_Four_Player (string name, T symbol);
-    void getmove(int& x, int& y) ;
+    void getmove(int& x, int& y) {
+        cout << "\nPlease enter your move by specifying the column (0-6): \n";
+        cin >> y;
+
+    }
 
 };
 
@@ -132,18 +136,14 @@ template <typename T>
 class Connect_Four_Random_Player : public RandomPlayer<T>{
 public:
     Connect_Four_Random_Player (T symbol);
-    void getmove(int &x, int &y) ;
+    void getmove(int &x, int &y) override{
+        x = rand() % this->dimension;
+        y = rand() % this->dimension;
+    }
 };
 
 template <typename T>
 Connect_Four_Player<T>::Connect_Four_Player(string name, T symbol) : Player<T>(name, symbol) {}
-
-template <typename T>
-void Connect_Four_Player<T>::getmove(int& x, int& y) {
-    cout << "\nPlease enter your move by specifying the column (0-6): \n";
-    cin >> y;
-
-}
 
 template <typename T>
 Connect_Four_Random_Player<T>::Connect_Four_Random_Player(T symbol) : RandomPlayer<T>(symbol) {
@@ -152,10 +152,4 @@ Connect_Four_Random_Player<T>::Connect_Four_Random_Player(T symbol) : RandomPlay
     srand(static_cast<unsigned int>(time(0)));
 }
 
-template <typename T>
-void Connect_Four_Random_Player<T>::getmove(int& x, int& y) {
-    x = rand() % this->dimension;
-    y = rand() % this->dimension;
-}
-
-#endif  BOARD_GAMES_FOURINROW_H
+#endif
