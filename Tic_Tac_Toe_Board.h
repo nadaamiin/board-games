@@ -9,9 +9,6 @@ Player<char>* globalPlayers[2];
 
 template <typename T>
 class Tic_Tac_Toe_Board  : public Board<char>{
-private:
-    //Player<char>* players[2];  // Add this member to the class
-
 public:
 
     Tic_Tac_Toe_Board(){
@@ -56,10 +53,8 @@ public:
         if(board[x][y] != ' ')
             return false;
 
-        //cout << "Updating board at (" << x << ", " << y << ") with " << symbol << endl;
         board[x][y] = symbol;   //If valid move place the player symbol in cell
         n_moves++;
-       // cout << "Move count: " << n_moves << endl;
         return true;
 
     }
@@ -195,12 +190,6 @@ public:
         x = rand() % this->dimension;
         y = rand() % this->dimension;
     }
-
-    // Helper method to set the name
-    void setName(const string& newName) {
-        this->name = newName;
-    }
-
 
 };
 
