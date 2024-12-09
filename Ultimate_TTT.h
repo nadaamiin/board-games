@@ -11,6 +11,7 @@ static int counter = 0;
 template <typename T>
 class Ultimate_TTT : public Board<T> {
     T** sub_board;
+    int sub_moves = 0;
 public:
     Ultimate_TTT() {
         this->rows = 3;
@@ -41,7 +42,7 @@ public:
             for (int i = 0; i < this->rows; i++) {
                 cout << "\n|";
                 for (int j = 0; j < this->columns; j++) {
-                    cout << setw(2) << this->sub_board[i][j] << setw(2) << " |";
+                    cout << setw(2) << sub_board[i][j] << setw(2) << " |";
                 }
                 cout << "\n-------------";
             }
@@ -49,33 +50,101 @@ public:
         }
     }
     bool update_board(int x, int y, T symbol) override{
-        // Only update if move is valid
-        if (!(x < 0 || x >= this->rows || y < 0 || y >= this->columns) && (this->board[x][y] == ' ' ||
-        isdigit(this->board[x][y]) || symbol == 0)) {
-            if (symbol == 0){
-                this->n_moves--;
-                this->board[x][y] = ' ';
+        //Check is move within bound or not
+        if(x < 0 || x>= this->rows || y < 0 || y >= this->columns)
+            return false;
+
+        if(counter % 2 == 0){
+            if(this->board[x][y] != ' ')
+                return false;
+            this->board[x][y] = symbol;   //If valid move place the player symbol in cell
+            this->n_moves++;
+        }
+        else{
+            if(this->sub_board[x][y] != ' ')
+                return false;
+            this->sub_board[x][y] = symbol;   //If valid move place the player symbol in cell
+            this->n_moves++;
+
+        }
+    }
+
+    char sub_win(){
+        // Check rows
+        for (int i = 0; i < this->rows; i++) {
+            if (sub_board[i][0] == sub_board[i][1] && sub_board[i][1] == sub_board[i][2] && sub_board[i][0] != ' ') {
+                if(sub_board[i][0] == 'X') {
+                    counter++;
+                    return 'X';
+                }
+                else {
+                    counter++;
+                    return 'O';
+                }
             }
-            else {
-                this->n_moves++;
-                this->board[x][y] = toupper(symbol);
+        }
+
+        // Check columns
+        for (int i = 0; i < this->columns; i++) {
+            if (sub_board[0][i] == sub_board[1][i] && sub_board[1][i] == sub_board[2][i] && sub_board[0][i] != ' ') {
+                if(sub_board[0][i] == 'X') {
+                    counter++;
+                    return 'X';
+                }
+                else {
+                    counter++;
+                    return 'O';
+                }
             }
+        }
+
+        // Check diagonals
+        //if X is the winner
+        if ((sub_board[0][0] == sub_board[1][1] && sub_board[1][1] == sub_board[2][2] && sub_board[0][0] == 'X') ||
+            (sub_board[0][2] == sub_board[1][1] && sub_board[1][1] == sub_board[2][0] && sub_board[0][2] == 'X')) {
+            counter++;
+            return 'X';
+        }
+        //if O is the winner
+        else if ((sub_board[0][0] == sub_board[1][1] && sub_board[1][1] == sub_board[2][2] && sub_board[0][0] == 'O') ||
+                 (sub_board[0][2] == sub_board[1][1] && sub_board[1][1] == sub_board[2][0] && sub_board[0][2] == 'O')) {
+            counter++;
+            return 'O';
+        }
+    }
+
+    bool is_win() override{
+        // Check rows
+        for (int i = 0; i < this->rows; i++) {
+            if (this->board[i][0] == this->board[i][1] && this->board[i][1] == this->board[i][2] && this->board[i][0] != ' ') {
+                counter++;
+                return true;
+            }
+        }
+
+        // Check columns
+        for (int i = 0; i < this->columns; i++) {
+            if (this->board[0][i] == this->board[1][i] && this->board[1][i] == this->board[2][i] && this->board[0][i] != ' ') {
+                counter++;
+                return true;
+            }
+        }
+
+        // Check diagonals
+        if ((this->board[0][0] == this->board[1][1] && this->board[1][1] == this->board[2][2] && this->board[0][0] != ' ') ||
+            (this->board[0][2] == this->board[1][1] && this->board[1][1] == this->board[2][0] && this->board[0][2] != ' ')) {
+            counter++;
             return true;
         }
+
         return false;
-    }
-    bool is_win() override{
 
     }
 
     bool is_draw() override{
+        return (this->n_moves == 9 && !is_win());
+    }
 
-    }
-    bool is_complete(){
-        if(is_win()){
-            counter+=2;
-        }
-    }
 
     bool game_is_over() override{
 
