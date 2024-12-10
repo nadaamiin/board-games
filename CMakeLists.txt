@@ -4,8 +4,12 @@ project(board_games)
 set(CMAKE_CXX_STANDARD 23)
 
 add_executable(board_games
-        main.cpp
         BoardGame_Classes.h
         MinMaxPlayer.h
         Pyramid_TicTacToe.h
-        Word_TicTacTtoe.h)
+        Word_TicTacTtoe.h
+        FourInRow.h
+        NumericalTicTacToe.h
+        Main.cpp
+        Ultimate_TTT.h
+)
