@@ -5,6 +5,8 @@
 #include "BoardGame_Classes.h"
 
 using namespace std;
+static bool isRandom = false;
+
 template <typename T>
 class PyramidTicTacToe : public Board<T> {
 public:
@@ -51,6 +53,9 @@ public:
             }
             return true;
         }
+        if(!isRandom){
+            cerr << "Invalid move";
+        }
         return false;
     }
     /// Returns true if there is any winner
@@ -95,10 +100,6 @@ public:
         int index;
         cout << "Enter the index of box you want to add in:";
         cin >> index;
-        while(isalpha(index)){
-            cout << "Enter a number please:";
-            cin >> index;
-        }
         /// Assign each number in the pyramid to its corresponding index
         if(index == 1){
             x = 0;
@@ -131,6 +132,7 @@ public:
     void getmove(int& x, int& y) override{
         x = rand() % this->dimension;  // Random number between 0 and 2
         y = rand() % 5;
+        isRandom = true;
     }
 };
 
