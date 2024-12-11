@@ -3,163 +3,53 @@
 
 #include <iostream>
 #include <iomanip>
+#include <vector>
 #include "BoardGame_Classes.h"
-//
+
 using namespace std;
-static int counter = 0;
 
 template <typename T>
-class Ultimate_TTT : public Board<T> {
-    T** sub_board;
-    int sub_moves = 0;
+class Sub_boards{
+private:
+    vector<vector<T>> sub_board;
+    char winner;
+    int moves;
 public:
-    Ultimate_TTT() {
-        this->rows = 3;
-        this->columns = 3;
+    // Initialize the sub board with numbers to make it easy for the players
+    Sub_boards() : sub_board(3, vector<T>(3)), winner(' '), moves(0){
         int count = 1;
-        this->board = new char*[this->rows];
-        for (int i = 0; i < this->rows; ++i) {
-            this->board[i] = new char[this->columns];
-            for (int j = 0; j < this->columns; ++j) {
-                this->board[i][j] = '0' + count;
-                this->sub_board[i][j] = '0' + count;
+        for (int i = 0; i < 3; ++i) {
+            for (int j = 0; j < 3; ++j) {
+                sub_board[i][j] = '0' + count;
                 count++;
             }
-            this->n_moves = 0;
         }
     }
-    void display_board() override{
-        if(counter % 2 == 0) {
-            for (int i = 0; i < this->rows; i++) {
-                cout << "\n|";
-                for (int j = 0; j < this->columns; j++) {
-                    cout << setw(2) << this->board[i][j] << setw(2) << " |";
-                }
-                cout << "\n-------------";
+    void display_subBoard(int row){
+        // If there is a winner print the symbol of the winner in the center
+        if (winner != ' ') {
+            if (row == 1) {
+                cout << setw(8) << winner << setw(12);
             }
-            cout << endl;
-        }else{
-            for (int i = 0; i < this->rows; i++) {
-                cout << "\n|";
-                for (int j = 0; j < this->columns; j++) {
-                    cout << setw(2) << sub_board[i][j] << setw(2) << " |";
-                }
-                cout << "\n-------------";
-            }
-            cout << endl;
-        }
-    }
-    bool update_board(int x, int y, T symbol) override{
-        //Check is move within bound or not
-        if(x < 0 || x>= this->rows || y < 0 || y >= this->columns)
-            return false;
-
-        if(counter % 2 == 0){
-            if(this->board[x][y] != ' ')
-                return false;
-            this->board[x][y] = symbol;   //If valid move place the player symbol in cell
-            this->n_moves++;
-        }
-        else{
-            if(this->sub_board[x][y] != ' ')
-                return false;
-            this->sub_board[x][y] = symbol;   //If valid move place the player symbol in cell
-            this->n_moves++;
-
-        }
-    }
-
-    char sub_win(){
-        // Check rows
-        for (int i = 0; i < this->rows; i++) {
-            if (sub_board[i][0] == sub_board[i][1] && sub_board[i][1] == sub_board[i][2] && sub_board[i][0] != ' ') {
-                if(sub_board[i][0] == 'X') {
-                    counter++;
-                    return 'X';
-                }
-                else {
-                    counter++;
-                    return 'O';
-                }
+            else {
+                cout << setw(8) << " " << setw(12);
             }
         }
-
-        // Check columns
-        for (int i = 0; i < this->columns; i++) {
-            if (sub_board[0][i] == sub_board[1][i] && sub_board[1][i] == sub_board[2][i] && sub_board[0][i] != ' ') {
-                if(sub_board[0][i] == 'X') {
-                    counter++;
-                    return 'X';
-                }
-                else {
-                    counter++;
-                    return 'O';
-                }
+        else if(is_subDraw()){
+            if (row == 1) {
+                cout << setw(8) << "Draw" << setw(12);
+            }else {
+                cout << setw(8) << " " << setw(12);
             }
         }
-
-        // Check diagonals
-        //if X is the winner
-        if ((sub_board[0][0] == sub_board[1][1] && sub_board[1][1] == sub_board[2][2] && sub_board[0][0] == 'X') ||
-            (sub_board[0][2] == sub_board[1][1] && sub_board[1][1] == sub_board[2][0] && sub_board[0][2] == 'X')) {
-            counter++;
-            return 'X';
-        }
-        //if O is the winner
-        else if ((sub_board[0][0] == sub_board[1][1] && sub_board[1][1] == sub_board[2][2] && sub_board[0][0] == 'O') ||
-                 (sub_board[0][2] == sub_board[1][1] && sub_board[1][1] == sub_board[2][0] && sub_board[0][2] == 'O')) {
-            counter++;
-            return 'O';
-        }
-    }
-
-    bool is_win() override{
-        // Check rows
-        for (int i = 0; i < this->rows; i++) {
-            if (this->board[i][0] == this->board[i][1] && this->board[i][1] == this->board[i][2] && this->board[i][0] != ' ') {
-                counter++;
-                return true;
+        // If there is no winner or draw print the sub-board
+        else {
+            for (int i = 0; i < 3; i++) {
+                cout << "[" << setw(2) << sub_board[row][i] << setw(2) << "]";
             }
         }
-
-        // Check columns
-        for (int i = 0; i < this->columns; i++) {
-            if (this->board[0][i] == this->board[1][i] && this->board[1][i] == this->board[2][i] && this->board[0][i] != ' ') {
-                counter++;
-                return true;
-            }
-        }
-
-        // Check diagonals
-        if ((this->board[0][0] == this->board[1][1] && this->board[1][1] == this->board[2][2] && this->board[0][0] != ' ') ||
-            (this->board[0][2] == this->board[1][1] && this->board[1][1] == this->board[2][0] && this->board[0][2] != ' ')) {
-            counter++;
-            return true;
-        }
-
-        return false;
-
     }
-
-    bool is_draw() override{
-        return (this->n_moves == 9 && !is_win());
-    }
-
-
-    bool game_is_over() override{
-
-    }
-
-
-};
-
-template <typename T>
-class Ultimate_player : public Player<T>{
-    Ultimate_player(string name, T symbol) : Player<T>(name, symbol){}
-    void getmove(int& x, int& y) override{
-        int index;
-        cout << "Enter the box you want to play in:";
-        cin >> index;
+    bool update_subBoard(int x, int y, T symbol, int index){
         /// Assign each number in the board to its corresponding index
         if(index == 1 || index == 2 || index == 3){
             x = 0;
@@ -175,8 +65,237 @@ class Ultimate_player : public Player<T>{
         }else if(index == 3 || index == 6 || index == 9){
             y = 2;
         }
+
+        // Only update if move is valid
+        if (!(x < 0 || x >= 3 || y < 0 || y >= 3) && (sub_board[x][y] == ' ' ||
+        isdigit(sub_board[x][y]) || symbol == 0)) {
+            if (symbol == 0){
+                moves--;
+                sub_board[x][y] = ' ';
+            }
+            else {
+                moves++;
+                sub_board[x][y] = toupper(symbol);
+            }
+            return true;
+        }
+        return false;
+    }
+    char sub_win() {
+        // Check rows
+        for (int i = 0; i < 3; i++) {
+            if (sub_board[i][0] == sub_board[i][1] && sub_board[i][1] == sub_board[i][2]
+            && sub_board[i][0] != ' ') {
+                winner = sub_board[i][0];
+                return winner;
+            }
+        }
+
+        // Check columns
+        for (int i = 0; i < 3; i++) {
+            if (sub_board[0][i] == sub_board[1][i] && sub_board[1][i] == sub_board[2][i]
+            && sub_board[0][i] != ' ') {
+                winner = sub_board[0][i];
+                return winner;
+            }
+        }
+
+        // Check diagonals
+        if ((sub_board[0][0] == sub_board[1][1] && sub_board[1][1] == sub_board[2][2]
+            && sub_board[0][0] != ' ') ||
+            (sub_board[0][2] == sub_board[1][1] && sub_board[1][1] == sub_board[2][0]
+            && sub_board[0][2] != ' ')) {
+            winner = sub_board[1][1];
+            return winner;
+        }
+
+        return ' ';
+    }
+    // Getter to access winner attribute
+    char get_winner() {
+        return winner;
+    }
+    bool is_subDraw() {
+        return (moves == 9 && sub_win() == ' ');
+    }
+};
+
+template <typename T>
+class Ultimate_TTT : public Board<T> {
+private:
+    vector<vector<Sub_boards<T>>> sub_board;
+public:
+    static bool p1_israndom;
+    static bool p2_israndom;
+
+    Ultimate_TTT() : sub_board(3, vector<Sub_boards<T>>(3)){
+        this->rows = 3;
+        this->columns = 3;
+        int count = 1;
+        this->board = new char*[this->rows];
+        for (int i = 0; i < this->rows; ++i) {
+            this->board[i] = new char[this->columns];
+            for (int j = 0; j < this->columns; ++j) {
+                this->board[i][j] = 0;
+                count++;
+            }
+            this->n_moves = 0;
+        }
+    }
+    void display_board() override{
+        cout << endl << setw(13) << 0 << " " << setw(19) << 1 << " " << setw(19) << 2 << endl;
+        for (int i = 0; i < 3; i++) {
+            for (int k = 0; k < 3; ++k) {
+                if (k == 1) {
+                    cout << setw(3) << i << "  ";
+                } else {
+                    cout << setw(5) << " ";
+                }
+                for (int j = 0; j < 3; j++) {
+                    sub_board[i][j].display_subBoard(k);
+                    if(j < 2) cout << "  |  ";
+                }
+                cout << endl;
+            }
+            if(i < 2){
+                cout << setw(5) << " " << "--------------------------------------------------------\n";
+            }
+        }
+    }
+    bool update_board(int x, int y, T symbol) override{
+        // Validate that x and y are within the main board
+        if (x < 0 || x >= 3 || y < 0 || y >= 3) {
+            return false;
+        }
+        // Object to access the sub-board methods and attributes
+        Sub_boards<T>& newBoard = sub_board[x][y];
+
+        // If There is a winner in the sub-board prevent the players to choose it
+        if (newBoard.get_winner() != ' ') {
+            cout << "This sub-board has already been won by " << newBoard.get_winner() << "!" << endl;
+            return false;
+        }
+        // If There is a draw in the sub-board prevent the players to choose it
+        if(newBoard.is_subDraw()){
+            cout << "This sub-board is a draw, you can't add your symbol here" << endl;
+            return false;
+        }
+
+        // Determine the current player
+        bool isPlayer1 = (symbol == 'X'); // Assuming 'X' is Player 1 and 'O' is Player 2
+
+        // Let the user enter the index of the box in sub-board
+        int index;
+
+        if (isPlayer1 && p1_israndom) {
+            // Player 1 is a random computer player
+           // cout << "Player 1 (Random) turn." << endl;
+            index = rand() % 9 + 1; // Generate random index (1 to 9)
+        } else if (!isPlayer1 && p2_israndom) {
+            // Player 2 is a random computer player
+           // cout << "Player 2 (Random) turn." << endl;
+            index = rand() % 9 + 1; // Generate random index (1 to 9)
+        } else {
+            // Human player turn
+           // cout << "Player " << (isPlayer1 ? 1 : 2) << " (Human) turn." << endl;
+            cout << "Enter the number of the box you want to play in (1-9): ";
+            cin >> index;
+        }
+
+
+        // Update the sub-board
+        if (newBoard.update_subBoard(x, y, symbol, index)) {
+            // Check if the sub-board has a winner
+            char subWinner = newBoard.sub_win();
+            if (subWinner == 'X' || subWinner == 'O') {
+                // Update the overall board with the sub-winner
+                this->board[x][y] = subWinner;
+            }
+            // Increment the number of moves if any update happen in any sub-board
+            this->n_moves++;
+            return true;
+        }
+        return false;
+    }
+
+    bool is_win() override{
+        // Check rows for a winner
+        for (int i = 0; i < 3; i++) {
+            if (this->board[i][0] == this->board[i][1] &&
+                this->board[i][1] == this->board[i][2] &&
+                this->board[i][0] != 0) {  // Ensure it's not empty
+                return true;
+            }
+        }
+
+        // Check columns for a winner
+        for (int i = 0; i < 3; i++) {
+            if (this->board[0][i] == this->board[1][i] &&
+                this->board[1][i] == this->board[2][i] &&
+                this->board[0][i] != 0) {  // Ensure it's not empty
+                return true;
+            }
+        }
+
+        // Check diagonals for a winner
+        if ((this->board[0][0] == this->board[1][1] &&
+             this->board[1][1] == this->board[2][2] &&
+             this->board[0][0] != 0) ||  // Main diagonal
+            (this->board[0][2] == this->board[1][1] &&
+             this->board[1][1] == this->board[2][0] &&
+             this->board[0][2] != 0)) {  // Anti-diagonal
+            return true;
+        }
+
+        return false;    }
+
+    bool is_draw() override{
+        return (this->n_moves == 81 && !is_win());
+    }
+
+    bool game_is_over() override{
+        return is_win() || is_draw();
     }
 
 };
 
-#endif //BOARD_GAMES_ULTIMATE_TTT_H
+// initialize the static variable random
+template <typename T>
+bool Ultimate_TTT<T>:: p1_israndom = false;
+template <typename T>
+bool Ultimate_TTT<T>:: p2_israndom = false;
+
+
+template <typename T>
+class Ultimate_player : public Player<T>{
+public:
+    Ultimate_player(string name, T symbol) : Player<T>(name, symbol){}
+    void getmove(int& x, int& y) override{
+        cout << "Enter the index of the box you want to play in(row then column):";
+        cin >> x >> y;
+    }
+};
+
+
+// Random Computer Player Template
+template <typename T>
+class RandomComputerPlayer : public RandomPlayer<T> {
+public:
+    // Constructor
+    RandomComputerPlayer(T symbol) : RandomPlayer<T>(symbol) {
+        this->dimension = 3;
+        this->name = "Random Computer Player";
+        srand(static_cast<unsigned int>(time(0)));   // Seed the random number generator
+    }
+
+    // Generate random move
+    void getmove(int& x, int& y) override {
+        x = rand() % this->dimension;
+        y = rand() % this->dimension;
+    }
+
+};
+
+
+
+#endif // BOARD_GAMES_ULTIMATE_TTT_H
