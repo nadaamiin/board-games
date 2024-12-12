@@ -23,49 +23,89 @@ struct GameSetup {
 
 template <typename T>
 GameSetup<T> choosePlayer(Board<T>* board, T symbol1, T symbol2, int gameType) {
-    // Create Player 1
-    Player<T>* player1;
-    string player1_name;
-    cout << "Enter Player 1 name:\n";
-    cin >> player1_name;
+    // Choose Player 1 type
+    cout << "Choose the type of Player 1:\n1. Human Player\n2. Random Player\n3. AI Player\n";
+    int player1Type;
+    cin >> player1Type;
 
-    /// Player 1 creation
-    switch (gameType) {
-        case 1:{
-            player1 = new Pyramid_player<T>(player1_name, symbol1);
-            break;
+    Player<T>* player1;
+
+    if (player1Type == 1) {
+        string player1_name;
+        cout << "Enter Player 1 name:\n";
+        cin >> player1_name;
+        /// Player 1 creation
+        switch (gameType) {
+            case 1:{
+                player1 = new Pyramid_player<T>(player1_name, symbol1);
+                break;
+            }
+            case 2:{
+                player1 = new Connect_Four_Player<T>(player1_name, symbol1);
+                break;
+            }
+            case 3:{
+                // HENA ZWDY CREATION LPLAYER 1
+                break;
+            }
+            case 4:{
+                player1 = new Word_player<T>(player1_name,symbol1);
+                break;
+            }
+            case 5:{
+                player1 = new Numerical_TicTacToe_Player<T>(player1_name, symbol1);
+                break;
+            }
+            case 6:{
+                player1 = new Misere_Player<T>(player1_name,symbol1);
+                break;
+            }
+            case 7:{
+                player1 = new TicTacToe4x4_Player<T>(player1_name,symbol1);
+                break;
+            }
+            case 8:{
+                player1 = new Ultimate_player<T>(player1_name,symbol1);
+                break;
+            }
         }
-        case 2:{
-            player1 = new Connect_Four_Player<T>(player1_name, symbol1);
-            break;
-        }
-        case 3:{
-            // SOMETHING WRONG HERE YA SAFAF !
-           // player1 = new HumanPlayer<T>(player1_name, symbol1);
-            break;
-        }
-        case 4:{
-            player1 = new Word_player<T>(player1_name,symbol1);
-            break;
-        }
-        case 5:{
-            player1 = new Numerical_TicTacToe_Player<T>(player1_name, symbol1);
-            break;
-        }
-        case 6:{
-            player1 = new Misere_Player<T>(player1_name,symbol1);
-            break;
-        }
-        case 7:{
-            player1 = new TicTacToe4x4_Player<T>(player1_name,symbol1);
-            break;
-        }
-        case 8:{
-            player1 = new Ultimate_player<T>(player1_name,symbol1);
-            break;
+    } else if (player1Type == 2) {
+        switch (gameType) {
+            case 1:{
+                player1 = new Pyramid_randomPlayer<T>(symbol1);
+                break;
+            }
+            case 2:{
+                player1 = new Connect_Four_Random_Player<T>('X');
+                break;
+            }
+            case 3:{
+                // WE HENA EL RANDOM LE PLAYER 2
+                break;
+            }
+            case 4:{
+                player1 = new Word_randomPlayer(symbol1);
+                break;
+            }
+            case 5:{
+                player1 = new Numerical_TicTacToe_Random_Player<T>(symbol1);
+                break;
+            }
+            case 6:{
+                player1 = new Misere_Random_Player<T>(symbol1);
+                break;
+            }
+            case 7:{
+                player1 = new TicTacToe4x4_Random_Player<T>('X');
+                player1Random = true;
+                break;
+            }
+            case 8:{
+                /// ADD THE RANDOM HERE YA SAFSAF!
+                break;
+            }
         }
     }
-
     // Choose Player 2 type
     cout << "Choose the type of Player 2:\n1. Human Player\n2. Random Player\n3. AI Player\n";
     int player2Type;
@@ -139,7 +179,8 @@ GameSetup<T> choosePlayer(Board<T>* board, T symbol1, T symbol2, int gameType) {
                 break;
             }
             case 7:{
-                player2 = new TicTacToe4x4_Random_Player<T>(symbol2);
+                player2 = new TicTacToe4x4_Random_Player<T>('O');
+                player2Random = true;
                 break;
             }
             case 8:{

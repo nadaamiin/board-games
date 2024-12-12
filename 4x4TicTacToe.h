@@ -5,7 +5,8 @@
 #include <iomanip>
 #include <cctype>
 using namespace std;
-static bool isRandom = false;
+static bool player1Random = false;
+static bool player2Random = false;
 template <typename T>
 class TicTacToe4x4_Board:public Board<T> {
 public:
@@ -41,66 +42,127 @@ public:
 
     bool update_board(int x, int y, T symbol) override {
         // Player 1's or Player 2's move
-        if (this->n_moves % 2 == 0 || (this->n_moves % 2 == 1 && !isRandom)) {
-            cout << "Enter the current position (row and column) of the piece you want to move:\n";
-            cin >> currentX >> currentY;
-            cout << "Enter the target position (row and column) for your move:\n";
-            cin >> x >> y;
-        } else if (this->n_moves % 2 == 1 && isRandom) {
-            currentX = rand() % 4;
-            currentY = rand() % 4;
-        }
-
-        // Validate the current position
-        if (currentX < 0 || currentX >= this->rows || currentY < 0 || currentY >= this->columns) {
-            if (!isRandom || this->n_moves % 2 == 0) {
-                cerr << "Invalid move! Position out of bounds.\n";
+        if (this->n_moves % 2 == 0){
+            if (!player1Random) {
+                cout << "Enter the current position (row and column) of the piece you want to move:\n";
+                cin >> currentX >> currentY;
+                cout << "Enter the target position (row and column) for your move:\n";
+                cin >> x >> y;
+            } else {
+                currentX = rand() % 4;
+                currentY = rand() % 4;
             }
-            return false;
-        }
 
-        if (this->board[currentX][currentY] != symbol) {
-            if (!isRandom || this->n_moves % 2 == 0) {
-                cerr << "Invalid move! Cell does not contain your symbol.\n";
+            // Validate the current position
+            if (currentX < 0 || currentX >= this->rows || currentY < 0 || currentY >= this->columns) {
+                if (!player1Random ) {
+                    cerr << "Invalid move! Position out of bounds.\n";
+                }
+                return false;
             }
-            return false;
-        }
 
-        // Validate the target position
-        if (x < 0 || x >= this->rows || y < 0 || y >= this->columns) {
-            if (!isRandom || this->n_moves % 2 == 0) {
-                cerr << "Invalid move! Target position out of bounds.\n";
+            if (this->board[currentX][currentY] != symbol) {
+                if (!player1Random ) {
+                    cerr << "Invalid move! Cell does not contain your symbol.\n";
+                }
+                return false;
             }
-            return false;
-        }
 
-        // Check if the target cell is empty
-        if (this->board[x][y] != 0) {
-            if (!isRandom || this->n_moves % 2 == 0) {
-                cerr << "Invalid move! Target cell is already occupied.\n";
+            // Validate the target position
+            if (x < 0 || x >= this->rows || y < 0 || y >= this->columns) {
+                if (!player1Random ) {
+                    cerr << "Invalid move! Target position out of bounds.\n";
+                }
+                return false;
             }
-            return false;
-        }
 
-        // Check if the move is valid (adjacent cells)
-        if ((x == currentX + 1 && y == currentY) || (x == currentX && y == currentY + 1) ||
-            (x == currentX - 1 && y == currentY) || (x == currentX && y == currentY - 1)) {
-
-            // Make the move
-            this->board[currentX][currentY] = 0;  // Clear the current position
-            this->board[x][y] = symbol;           // Place the symbol in the target position
-
-            // Increment the move count
-            this->n_moves++;
-            return true;  // Move successful
-        } else {
-            if (!isRandom || this->n_moves % 2 == 0) {
-                cerr << "Invalid move! Move must be to an adjacent position.\n";
+            // Check if the target cell is empty
+            if (this->board[x][y] != 0) {
+                if (!player1Random) {
+                    cerr << "Invalid move! Target cell is already occupied.\n";
+                }
+                return false;
             }
-            return false;
+
+            // Check if the move is valid (adjacent cells)
+            if ((x == currentX + 1 && y == currentY) || (x == currentX && y == currentY + 1) ||
+                (x == currentX - 1 && y == currentY) || (x == currentX && y == currentY - 1)) {
+
+                // Make the move
+                this->board[currentX][currentY] = 0;  // Clear the current position
+                this->board[x][y] = symbol;           // Place the symbol in the target position
+
+                // Increment the move count
+                this->n_moves++;
+                return true;  // Move successful
+            } else {
+                if (!player1Random ) {
+                    cerr << "Invalid move! Move must be to an adjacent position.\n";
+                }
+                return false;
+            }
+        } else{
+            if (!player2Random) {
+                cout << "Enter the current position (row and column) of the piece you want to move:\n";
+                cin >> currentX >> currentY;
+                cout << "Enter the target position (row and column) for your move:\n";
+                cin >> x >> y;
+            } else {
+                currentX = rand() % 4;
+                currentY = rand() % 4;
+            }
+
+            // Validate the current position
+            if (currentX < 0 || currentX >= this->rows || currentY < 0 || currentY >= this->columns) {
+                if (!player2Random ) {
+                    cerr << "Invalid move! Position out of bounds.\n";
+                }
+                return false;
+            }
+
+            if (this->board[currentX][currentY] != symbol) {
+                if (!player2Random ) {
+                    cerr << "Invalid move! Cell does not contain your symbol.\n";
+                }
+                return false;
+            }
+
+            // Validate the target position
+            if (x < 0 || x >= this->rows || y < 0 || y >= this->columns) {
+                if (!player2Random ) {
+                    cerr << "Invalid move! Target position out of bounds.\n";
+                }
+                return false;
+            }
+
+            // Check if the target cell is empty
+            if (this->board[x][y] != 0) {
+                if (!player2Random) {
+                    cerr << "Invalid move! Target cell is already occupied.\n";
+                }
+                return false;
+            }
+
+            // Check if the move is valid (adjacent cells)
+            if ((x == currentX + 1 && y == currentY) || (x == currentX && y == currentY + 1) ||
+                (x == currentX - 1 && y == currentY) || (x == currentX && y == currentY - 1)) {
+
+                // Make the move
+                this->board[currentX][currentY] = 0;  // Clear the current position
+                this->board[x][y] = symbol;           // Place the symbol in the target position
+
+                // Increment the move count
+                this->n_moves++;
+                return true;  // Move successful
+            } else {
+                if (!player2Random ) {
+                    cerr << "Invalid move! Move must be to an adjacent position.\n";
+                }
+                return false;
+            }
         }
+
     }
-
 
     void display_board() override {
         cout << "   ";
@@ -214,7 +276,6 @@ template <typename T>
 void TicTacToe4x4_Random_Player<T>::getmove(int& x, int& y) {
     x = rand() % this->dimension;
     y = rand() % this->dimension;
-    isRandom = true;
 }
 
 #endif

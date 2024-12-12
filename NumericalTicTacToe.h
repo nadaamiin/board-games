@@ -31,13 +31,13 @@ public:
     bool update_board(int x, int y, T symbol) override {
         // Validate position
         if (x < 0 || x >= this->rows || y < 0 || y >= this->columns) {
-            if(!isRandom5 || this->n_moves %2 ==0){
+            if(!isRandom5 ){
                 cerr << "Invalid move! Position out of bounds.\n";
             }
             return false;
         }
         if (this->board[x][y] != 0) {
-            if(!isRandom5|| this->n_moves %2 ==0){
+            if(!isRandom5){
                 cerr << "Invalid move! Cell already occupied.\n";
             }
             return false;
@@ -50,7 +50,7 @@ public:
                 this->n_moves++;
                 return true;
             } else {
-                if(!isRandom5 || this->n_moves %2 ==0){
+                if(!isRandom5 ){
                     cerr<< "Invalid move! Number not allowed or already used by Player 1.\n";
                 }
                 return false;
@@ -59,12 +59,12 @@ public:
         // Player 2's turn
         else {
             if (find(player2_values.begin(), player2_values.end(), symbol) != player2_values.end()) {
-                this->board[x][y] = symbol; // Make sure the symbol is uppercase
+                this->board[x][y] = symbol;
                 player2_values.erase(remove(player2_values.begin(), player2_values.end(), symbol), player2_values.end());
                 this->n_moves++;
                 return true;
             } else {
-                if(!isRandom5 || this->n_moves %2 ==0){
+                if(!isRandom5){
                     cerr<< "Invalid move! Number not allowed or already used by Player 2.\n";
                 }
                 return false;
@@ -161,10 +161,10 @@ Numerical_TicTacToe_Random_Player<T>::Numerical_TicTacToe_Random_Player(T symbol
 template <typename T>
 void Numerical_TicTacToe_Random_Player<T>::getmove(int& x, int& y){
     isRandom5 = true;
-    vector<int> even_numbers = {2, 4, 6, 8};
+    vector<int> numbers = {1,2,3, 4,5, 6,7, 8,9};
     int randomNumber;
 
-    randomNumber = even_numbers[rand() % even_numbers.size()];
+    randomNumber = numbers[rand() % numbers.size()];
 
     x = rand() % this->dimension;
     y = rand() % this->dimension;
