@@ -14,7 +14,10 @@ private:
     vector<vector<T>> sub_board;
     char winner;
     int moves;
+
 public:
+    static int sub_occ;    ///count number of sub board occupied
+
     // Initialize the sub board with numbers to make it easy for the players
     Sub_boards() : sub_board(3, vector<T>(3)), winner(' '), moves(0){
         int count = 1;
@@ -87,6 +90,7 @@ public:
             if (sub_board[i][0] == sub_board[i][1] && sub_board[i][1] == sub_board[i][2]
             && sub_board[i][0] != ' ') {
                 winner = sub_board[i][0];
+                sub_occ++;
                 return winner;
             }
         }
@@ -96,6 +100,7 @@ public:
             if (sub_board[0][i] == sub_board[1][i] && sub_board[1][i] == sub_board[2][i]
             && sub_board[0][i] != ' ') {
                 winner = sub_board[0][i];
+                sub_occ++;
                 return winner;
             }
         }
@@ -106,6 +111,7 @@ public:
             (sub_board[0][2] == sub_board[1][1] && sub_board[1][1] == sub_board[2][0]
             && sub_board[0][2] != ' ')) {
             winner = sub_board[1][1];
+            sub_occ++;
             return winner;
         }
 
@@ -116,9 +122,17 @@ public:
         return winner;
     }
     bool is_subDraw() {
-        return (moves == 9 && sub_win() == ' ');
+        if(moves == 9 && sub_win() == ' '){
+            sub_occ++;
+            return true;
+        }
+        return false;
     }
 };
+
+template <typename T>
+int Sub_boards<T> :: sub_occ = 0;
+
 
 template <typename T>
 class Ultimate_TTT : public Board<T> {
@@ -163,43 +177,57 @@ public:
         }
     }
     bool update_board(int x, int y, T symbol) override{
+        // determine which player turn
+        bool isPlayer1 = (symbol == 'X'); // Assuming 'X' is Player 1 and 'O' is Player 2
         // Validate that x and y are within the main board
         if (x < 0 || x >= 3 || y < 0 || y >= 3) {
+            // print error messages only if human player
+            if (isPlayer1 && !p1_israndom || !isPlayer1 && !p2_israndom)
+            cout << "Invalid main board index! Please enter values between 0 and 2." << endl;
             return false;
         }
+
         // Object to access the sub-board methods and attributes
         Sub_boards<T>& newBoard = sub_board[x][y];
 
         // If There is a winner in the sub-board prevent the players to choose it
         if (newBoard.get_winner() != ' ') {
+            if (isPlayer1 && !p1_israndom || !isPlayer1 && !p2_israndom)
             cout << "This sub-board has already been won by " << newBoard.get_winner() << "!" << endl;
             return false;
         }
         // If There is a draw in the sub-board prevent the players to choose it
         if(newBoard.is_subDraw()){
+            if (isPlayer1 && !p1_israndom || !isPlayer1 && !p2_israndom)
             cout << "This sub-board is a draw, you can't add your symbol here" << endl;
             return false;
         }
 
-        // Determine the current player
-        bool isPlayer1 = (symbol == 'X'); // Assuming 'X' is Player 1 and 'O' is Player 2
-
-        // Let the user enter the index of the box in sub-board
         int index;
+        // Let the user keep selecting indices within the same sub-board until a valid move is made
+        while (true) {
+            if (isPlayer1 && p1_israndom) {
+                // Player 1 is a random computer player
+                index = rand() % 9 + 1;
+                break;
+            } else if (!isPlayer1 && p2_israndom) {
+                // Player 2 is a random computer player
+                index = rand() % 9 + 1;
+                break;
+            } else {
+                // Human player turn
+                //cout << "Player " << (isPlayer1 ? 1 : 2) << " (Human) turn." << endl;
+                cout << "Enter the number of the box you want to play in (1-9): ";
+                cin >> index;
 
-        if (isPlayer1 && p1_israndom) {
-            // Player 1 is a random computer player
-           // cout << "Player 1 (Random) turn." << endl;
-            index = rand() % 9 + 1; // Generate random index (1 to 9)
-        } else if (!isPlayer1 && p2_israndom) {
-            // Player 2 is a random computer player
-           // cout << "Player 2 (Random) turn." << endl;
-            index = rand() % 9 + 1; // Generate random index (1 to 9)
-        } else {
-            // Human player turn
-           // cout << "Player " << (isPlayer1 ? 1 : 2) << " (Human) turn." << endl;
-            cout << "Enter the number of the box you want to play in (1-9): ";
-            cin >> index;
+                // Validate the index
+                if (index < 1 || index > 9) {
+                    cout << "Invalid sub-board box index! Please enter a value between 1 and 9." << endl;
+                    continue;
+                }
+                else
+                    break;
+            }
         }
 
 
@@ -250,7 +278,7 @@ public:
         return false;    }
 
     bool is_draw() override{
-        return (this->n_moves == 81 && !is_win());
+        return (sub_board[3][3].sub_occ == 9 && !is_win());
     }
 
     bool game_is_over() override{
