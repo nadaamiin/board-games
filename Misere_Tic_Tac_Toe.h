@@ -8,7 +8,7 @@
 
 using namespace std;
 
-Player<char>* globalPlayers[2];
+Player<char>* globalPlayers2[2];
 
 
 template <typename T>
@@ -36,8 +36,8 @@ public:
         }
         delete[] board;
 
-        globalPlayers[0] = nullptr;
-        globalPlayers[1] = nullptr;
+        globalPlayers2[0] = nullptr;
+        globalPlayers2[1] = nullptr;
     }
 
     bool update_board (int x , int y , char symbol) override{
@@ -72,9 +72,9 @@ public:
         for (int i = 0; i < rows; i++) {
             if (board[i][0] == board[i][1] && board[i][1] == board[i][2] && board[i][0] != ' ') {
                 if(board[i][0] == 'X')
-                    *globalPlayers[0] = *globalPlayers[1];  // This copies the entire player object
+                    *globalPlayers2[0] = *globalPlayers2[1];  // This copies the entire player object
                 else
-                    *globalPlayers[1] = *globalPlayers[0];  // This copies the entire player object
+                    *globalPlayers2[1] = *globalPlayers2[0];  // This copies the entire player object
                 return true;
             }
         }
@@ -83,9 +83,9 @@ public:
         for (int i = 0; i < columns; i++) {
             if (board[0][i] == board[1][i] && board[1][i] == board[2][i] && board[0][i] != ' ') {
                 if(board[0][i] == 'X')
-                    *globalPlayers[0] = *globalPlayers[1];  // This copies the entire player object
+                    *globalPlayers2[0] = *globalPlayers2[1];  // This copies the entire player object
                 else
-                    *globalPlayers[1] = *globalPlayers[0];  // This copies the entire player object
+                    *globalPlayers2[1] = *globalPlayers2[0];  // This copies the entire player object
                 return true;
             }
         }
@@ -93,12 +93,12 @@ public:
         // Check diagonals
         if ((board[0][0] == board[1][1] && board[1][1] == board[2][2] && board[0][0] == 'X') ||
             (board[0][2] == board[1][1] && board[1][1] == board[2][0] && board[0][2] == 'X')) {
-            *globalPlayers[0] = *globalPlayers[1];  // This copies the entire player object
+            *globalPlayers2[0] = *globalPlayers2[1];  // This copies the entire player object
             return true;
         }
         else if ((board[0][0] == board[1][1] && board[1][1] == board[2][2] && board[0][0] == 'O') ||
                  (board[0][2] == board[1][1] && board[1][1] == board[2][0] && board[0][2] == 'O')) {
-            *globalPlayers[1] = *globalPlayers[0];  // This copies the entire player object
+            *globalPlayers2[1] = *globalPlayers2[0];  // This copies the entire player object
             return true;
         }
 

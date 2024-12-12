@@ -307,10 +307,10 @@ public:
 
 // Random Computer Player Template
 template <typename T>
-class RandomComputerPlayer : public RandomPlayer<T> {
+class Ultimate_randomPlayer : public RandomPlayer<T> {
 public:
     // Constructor
-    RandomComputerPlayer(T symbol) : RandomPlayer<T>(symbol) {
+    Ultimate_randomPlayer(T symbol) : RandomPlayer<T>(symbol) {
         this->dimension = 3;
         this->name = "Random Computer Player";
         srand(static_cast<unsigned int>(time(0)));   // Seed the random number generator

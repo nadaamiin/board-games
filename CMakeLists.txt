@@ -11,4 +11,7 @@ add_executable(board_games
         FourInRow.h
         NumericalTicTacToe.h
         Ultimate_TTT.h
+        main.cpp
+        Tic_Tac_Toe_Board.h
+        Misere_Tic_Tac_Toe.h
 )
