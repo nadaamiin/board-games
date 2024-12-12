@@ -8,6 +8,9 @@
 
 using namespace std;
 
+Player<char>* globalPlayers[2];
+
+
 template <typename T>
 class Misere_Tic_Tac_Toe:public Board<char> {
 public:
@@ -32,6 +35,9 @@ public:
             delete[] board[i];
         }
         delete[] board;
+
+        globalPlayers[0] = nullptr;
+        globalPlayers[1] = nullptr;
     }
 
     bool update_board (int x , int y , char symbol) override{
@@ -64,27 +70,41 @@ public:
     bool is_win() override{
         // Check rows
         for (int i = 0; i < rows; i++) {
-            if (board[i][0] == board[i][1] && board[i][1] == board[i][2] && board[i][0] != ' ')
+            if (board[i][0] == board[i][1] && board[i][1] == board[i][2] && board[i][0] != ' ') {
+                if(board[i][0] == 'X')
+                    *globalPlayers[0] = *globalPlayers[1];  // This copies the entire player object
+                else
+                    *globalPlayers[1] = *globalPlayers[0];  // This copies the entire player object
                 return true;
+            }
         }
 
         // Check columns
         for (int i = 0; i < columns; i++) {
-            if (board[0][i] == board[1][i] && board[1][i] == board[2][i] && board[0][i] != ' ')
+            if (board[0][i] == board[1][i] && board[1][i] == board[2][i] && board[0][i] != ' ') {
+                if(board[0][i] == 'X')
+                    *globalPlayers[0] = *globalPlayers[1];  // This copies the entire player object
+                else
+                    *globalPlayers[1] = *globalPlayers[0];  // This copies the entire player object
                 return true;
+            }
         }
 
         // Check diagonals
-        if ((board[0][0] == board[1][1] && board[1][1] == board[2][2] && board[0][0] != ' ') ||
-            (board[0][2] == board[1][1] && board[1][1] == board[2][0] && board[0][2] != ' '))
+        if ((board[0][0] == board[1][1] && board[1][1] == board[2][2] && board[0][0] == 'X') ||
+            (board[0][2] == board[1][1] && board[1][1] == board[2][0] && board[0][2] == 'X')) {
+            *globalPlayers[0] = *globalPlayers[1];  // This copies the entire player object
             return true;
+        }
+        else if ((board[0][0] == board[1][1] && board[1][1] == board[2][2] && board[0][0] == 'O') ||
+                 (board[0][2] == board[1][1] && board[1][1] == board[2][0] && board[0][2] == 'O')) {
+            *globalPlayers[1] = *globalPlayers[0];  // This copies the entire player object
+            return true;
+        }
 
         return false;
     }
 
-    string winner(){
-
-    }
 
     bool is_draw() override{
         return (n_moves == 9 && !is_win());
@@ -103,7 +123,7 @@ public:
     Misere_Player(string name, T symbol) : Player<T>(name, symbol){}
 
     void getmove(int& x, int& y){
-        cout << "\nPlease enter your move x and y (0 to 2) separated by spaces:";
+        cout << this->name << ", enter your move (row [0-2] col [0-2]): ";
         cin >> x >> y;
     }
 
