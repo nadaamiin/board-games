@@ -5,7 +5,7 @@
 #include "BoardGame_Classes.h"
 
 using namespace std;
-static bool isRandom = false;
+static bool isRandom1 = false;
 
 template <typename T>
 class PyramidTicTacToe : public Board<T> {
@@ -53,7 +53,7 @@ public:
             }
             return true;
         }
-        if(!isRandom){
+        if(!isRandom1){
             cerr << "Invalid move";
         }
         return false;
@@ -132,7 +132,7 @@ public:
     void getmove(int& x, int& y) override{
         x = rand() % this->dimension;  // Random number between 0 and 2
         y = rand() % 5;
-        isRandom = true;
+        isRandom1 = true;
     }
 };
 
