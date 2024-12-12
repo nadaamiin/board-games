@@ -10,6 +10,5 @@ add_executable(board_games
         Word_TicTacTtoe.h
         FourInRow.h
         NumericalTicTacToe.h
-        Main.cpp
         Ultimate_TTT.h
 )
