@@ -67,7 +67,7 @@ GameSetup<T> choosePlayer(Board<T>* board, T symbol1, T symbol2, int gameType) {
     }
 
     // Choose Player 2 type
-    cout << "Choose the type of Player 2:\n1) Human Player\n2) Random Player\n3) AI Player\n";
+    cout << "Choose the type of Player 2:\n1. Human Player\n2. Random Player\n3. AI Player\n";
     int player2Type;
     cin >> player2Type;
 
@@ -172,7 +172,7 @@ int main() {
     while(true){
 
         int choice;
-        cout << "\nChoose a game:\n1.Pyramid Tic Tac Toe\n2. Connect Four\n3. 5*5 Tic Tac Toe\n4. Word Tic Tac Toe"
+        cout << "\nChoose a game:\n1. Pyramid Tic Tac Toe\n2. Connect Four\n3. 5*5 Tic Tac Toe\n4. Word Tic Tac Toe"
                 "\n5. Numerical Tic Tac Toe \n6. Misere Tic Tac Toe\n7. 4*4 Tic Tac Toe\n8. Ultimate Tic Tac Toe\n0. Exit\n";
         cin >> choice;
 
@@ -189,6 +189,7 @@ int main() {
                 game.run();
 
                 deletePlayers(setup);
+                cout << "_______________________________________________________";
                 break;
             }
             case 2: {
@@ -199,6 +200,7 @@ int main() {
                 game.run();
 
                 deletePlayers(setup);
+                cout << "_______________________________________________________";
                 break;
             }
             case 3:{
@@ -213,6 +215,7 @@ int main() {
                 game.run();
 
                 deletePlayers(setup);
+                cout << "_______________________________________________________";
                 break;
             }
             case 5: {
@@ -224,6 +227,7 @@ int main() {
                 game.run();
 
                 deletePlayers(setup);
+                cout << "_______________________________________________________";
                 break;
             }
             case 6:{
@@ -234,7 +238,9 @@ int main() {
                 game.run();
 
                 deletePlayers(setup);
-                break;            }
+                cout << "_______________________________________________________";
+                break;
+            }
             case 7:{
                 auto* board = new TicTacToe4x4_Board<char>();
 
@@ -244,6 +250,7 @@ int main() {
                 game.run();
 
                 deletePlayers(setup);
+                cout << "_______________________________________________________";
                 break;
             }
             case 8:{
@@ -255,6 +262,7 @@ int main() {
                 game.run();
 
                 deletePlayers(setup);
+                cout << "_______________________________________________________";
                 break;
             }
             default:
