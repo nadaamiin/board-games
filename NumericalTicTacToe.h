@@ -45,7 +45,7 @@ public:
         // Player 1's turn
         if (this->n_moves % 2 == 0) {
             if (find(player1_values.begin(), player1_values.end(), symbol) != player1_values.end()) {
-                this->board[x][y] = symbol; // Make sure the symbol is uppercase
+                this->board[x][y] = symbol;
                 player1_values.erase(remove(player1_values.begin(), player1_values.end(), symbol), player1_values.end());
                 this->n_moves++;
                 return true;

@@ -16,11 +16,6 @@ private:
 };
 
 
-
-
-
-
-
 //--------------------------------------- IMPLEMENTATION
 
 #include <limits>

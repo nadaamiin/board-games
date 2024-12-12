@@ -5,7 +5,7 @@
 #include <iomanip>
 #include <cctype>
 using namespace std;
-
+static bool isAI2 = false;
 
 template <typename T>
 class Connect_Four_Board:public Board<T> {
@@ -31,13 +31,19 @@ public:
     bool update_board(int x, int y, T symbol) override {
         // Check if the column is valid
         if (y < 0 || y >= this->columns) {
-            cerr << "Invalid column! \n";
+            if(!isAI2){
+                cerr << "Invalid column! \n";
+            }
             return false;
         }
 
         // Search from the bottom of the column (row 5) to the top (row 0)
         for (int row = 5; row >= 0; row--) {
-            if (this->board[row][y] == 0) {
+            if (symbol == 0){
+                this->n_moves--;
+                this->board[x][y] = 0;
+            }
+            else if (this->board[row][y] == 0) {
                 this->board[row][y] = toupper(symbol);
                 this->n_moves++;
                 return true;
@@ -45,7 +51,9 @@ public:
         }
 
         // If no empty spot is found
-        cerr << "Column is full! \n";
+        if(!isAI2){
+            cerr << "Column is full! \n";
+        }
         return false;
     }
 
@@ -124,7 +132,7 @@ template <typename T>
 class Connect_Four_Player : public Player<T> {
 public:
     Connect_Four_Player (string name, T symbol);
-    void getmove(int& x, int& y) {
+    void getmove(int& , int& y) {
         cout << "\nPlease enter your move by specifying the column (0-6): \n";
         cin >> y;
 
