@@ -14,4 +14,6 @@ add_executable(board_games
         main.cpp
         Tic_Tac_Toe_Board.h
         Misere_Tic_Tac_Toe.h
+        Pyramid_AI.h
+        Pyramid_AI.h
 )

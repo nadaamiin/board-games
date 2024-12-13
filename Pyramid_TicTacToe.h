@@ -53,9 +53,9 @@ public:
             }
             return true;
         }
-        if(!isRandom1){
-            cerr << "Invalid move";
-        }
+//        if(!isRandom1){
+//            cerr << "Invalid move";
+//        }
         return false;
     }
     /// Returns true if there is any winner
