@@ -186,46 +186,47 @@ public:
         cout << endl;
     }
     bool is_win() override {
-        // Check rows and columns
+        const int win_length = 3; // Number of symbols in a row needed to win
+
+        // Check rows
         for (int i = 0; i < this->rows; i++) {
-            for (int j = 0; j <= this->columns - 4; j++) {
-                // Check row
+            for (int j = 0; j <= this->columns - win_length; j++) {
                 if (this->board[i][j] != 0 &&
                     this->board[i][j] == this->board[i][j + 1] &&
-                    this->board[i][j + 1] == this->board[i][j + 2] &&
-                    this->board[i][j + 2] == this->board[i][j + 3]) {
+                    this->board[i][j + 1] == this->board[i][j + 2]) {
                     return true;
                 }
             }
         }
 
+        // Check columns
         for (int j = 0; j < this->columns; j++) {
-            for (int i = 0; i <= this->rows - 4; i++) {
-                // Check column
+            for (int i = 0; i <= this->rows - win_length; i++) {
                 if (this->board[i][j] != 0 &&
                     this->board[i][j] == this->board[i + 1][j] &&
-                    this->board[i + 1][j] == this->board[i + 2][j] &&
-                    this->board[i + 2][j] == this->board[i + 3][j]) {
+                    this->board[i + 1][j] == this->board[i + 2][j]) {
                     return true;
                 }
             }
         }
 
-        // Check diagonals
-        for (int i = 0; i <= this->rows - 4; i++) {
-            for (int j = 0; j <= this->columns - 4; j++) {
-                // Principal diagonal
+        // Check principal diagonals (top-left to bottom-right)
+        for (int i = 0; i <= this->rows - win_length; i++) {
+            for (int j = 0; j <= this->columns - win_length; j++) {
                 if (this->board[i][j] != 0 &&
                     this->board[i][j] == this->board[i + 1][j + 1] &&
-                    this->board[i + 1][j + 1] == this->board[i + 2][j + 2] &&
-                    this->board[i + 2][j + 2] == this->board[i + 3][j + 3]) {
+                    this->board[i + 1][j + 1] == this->board[i + 2][j + 2]) {
                     return true;
                 }
-                // Bottom-left to top-right diagonal
-                if (this->board[i + 3][j] != 0 &&
-                    this->board[i + 3][j] == this->board[i + 2][j + 1] &&
-                    this->board[i + 2][j + 1] == this->board[i + 1][j + 2] &&
-                    this->board[i + 1][j + 2] == this->board[i][j + 3]) {
+            }
+        }
+
+        // Check secondary diagonals (top-right to bottom-left)
+        for (int i = 0; i <= this->rows - win_length; i++) {
+            for (int j = win_length - 1; j < this->columns; j++) {
+                if (this->board[i][j] != 0 &&
+                    this->board[i][j] == this->board[i + 1][j - 1] &&
+                    this->board[i + 1][j - 1] == this->board[i + 2][j - 2]) {
                     return true;
                 }
             }
@@ -233,6 +234,7 @@ public:
 
         return false;
     }
+
 
     bool is_draw(){
         return false;
