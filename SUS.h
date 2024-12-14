@@ -10,7 +10,7 @@ using namespace std;
 
 static bool isRandom9 = false;
 Player<char>* globalPlayers_SUS[2];
-
+///
 template <typename T>
 class SUS_Board:public Board<T> {
 private:
