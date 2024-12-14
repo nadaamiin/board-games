@@ -45,7 +45,7 @@ GameSetup<T> choosePlayer(Board<T>* board, T symbol1, T symbol2, int gameType) {
                 break;
             }
             case 3:{
-                // HENA ZWDY CREATION LPLAYER 1
+                player1 = new  TTT_Player<T>(player1_name, symbol1);
                 break;
             }
             case 4:{
@@ -80,7 +80,7 @@ GameSetup<T> choosePlayer(Board<T>* board, T symbol1, T symbol2, int gameType) {
                 break;
             }
             case 3:{
-                // WE HENA EL RANDOM LE PLAYER 2
+                player1 =  new RandomComputerPlayer<T>('X');
                 break;
             }
             case 4:{
@@ -101,7 +101,8 @@ GameSetup<T> choosePlayer(Board<T>* board, T symbol1, T symbol2, int gameType) {
                 break;
             }
             case 8:{
-                /// ADD THE RANDOM HERE YA SAFSAF!
+                p1_israndom = true;
+                player1 = new RandomComputerPlayer_Ultimate<T>('X');
                 break;
             }
         }
@@ -128,7 +129,7 @@ GameSetup<T> choosePlayer(Board<T>* board, T symbol1, T symbol2, int gameType) {
                 break;
             }
             case 3:{
-                // HENA ZWDY CREATION LPLAYER 2
+                player2 = new TTT_Player<T>(player2_name, symbol2);
                 break;
             }
             case 4:{
@@ -163,7 +164,7 @@ GameSetup<T> choosePlayer(Board<T>* board, T symbol1, T symbol2, int gameType) {
                 break;
             }
             case 3:{
-                // WE HENA EL RANDOM LE PLAYER 2
+                player2 =  new RandomComputerPlayer<T>('O');
                 break;
             }
             case 4:{
@@ -184,7 +185,8 @@ GameSetup<T> choosePlayer(Board<T>* board, T symbol1, T symbol2, int gameType) {
                 break;
             }
             case 8:{
-                /// ADD THE RANDOM HERE YA SAFSAF!
+                p2_israndom = true;
+                player2 = new RandomComputerPlayer_Ultimate<T>('O');
                 break;
             }
         }
@@ -245,7 +247,16 @@ int main() {
                 break;
             }
             case 3:{
-                // WE HENA CALL LL3BA
+                auto* board = new Tic_Tac_Toe_Board<char>();
+                GameSetup<char> setup = choosePlayer<char>(board, 'X', 'O', 3);
+                GameManager<char> game(setup.board, setup.players);
+                globalPlayers_ttt[0] = setup.players[0];
+                globalPlayers_ttt[1] = setup.players[1];
+                game.run();
+
+                deletePlayers(setup);
+                cout << "_______________________________________________________";
+
                 break;
             }
             case 4:{
@@ -276,6 +287,9 @@ int main() {
                 GameSetup<char> setup = choosePlayer<char>(board, 'X', 'O', 6);
 
                 GameManager<char> game(setup.board, setup.players);
+                globalPlayers2[0] = setup.players[0];
+
+                globalPlayers2[1] = setup.players[1];
                 game.run();
 
                 deletePlayers(setup);
