@@ -5,15 +5,22 @@
 #include <iostream>
 #include <iomanip>
 #include <cctype>
+
 using namespace std;
+
 static bool isRandom9 = false;
 Player<char>* globalPlayers_SUS[2];
 
 template <typename T>
 class SUS_Board:public Board<T> {
-public:
+private:
+    bool countedRows[3] = {false, false, false};
+    bool countedCols[3] = {false, false, false};
+    bool countedDiagonals[2] = {false, false};
     int player1Points = 0;
     int player2Points = 0;
+
+public:
     SUS_Board (){
         this->rows = this->columns = 3;
         this->board = new char*[this->rows];
@@ -25,6 +32,25 @@ public:
         }
         this->n_moves = 0;
     }
+
+    // Destructor to free dynamically allocated memory
+    ~SUS_Board() {
+        for (int i = 0; i < this->rows; ++i) {
+            delete[] this->board[i];
+        }
+        delete[] this->board;
+        // Reset counted flags as they are of type static for multi games
+        for (int i = 0; i < 3; i++) {
+            countedRows[i] = false;
+            countedCols[i] = false;
+        }
+        countedDiagonals[0] = countedDiagonals[1] = false;
+
+        globalPlayers_SUS[0] = nullptr;
+        globalPlayers_SUS[1] = nullptr;
+
+    }
+
     bool update_board (int x , int y , T symbol) override{
         if (!(x < 0 || x >= this->rows || y < 0 || y >= this->columns) && (this->board[x][y] == 0|| symbol == 0)) {
             if (symbol == 0){
@@ -64,49 +90,66 @@ public:
         cout << endl;
     }
 
-    int playerCounter() {
-        int player_count = 0;
+    void SUS_count() {
 
         for (int i = 0; i < this->rows; i++) {
             // Check row
-            if (this->board[i][0] == 'S' && this->board[i][1] == 'U' && this->board[i][2] == 'S') {
-                this->n_moves % 2 == 0 ? player1Points++ : player2Points++;
-                player_count++;
+            if (!countedRows[i] && this->board[i][0] == 'S' && this->board[i][1] == 'U' && this->board[i][2] == 'S') {
+                if (this->n_moves % 2 == 0) {
+                    player2Points++;
+                } else {
+                    player1Points++;
+                }
+                countedRows[i] = true; // Mark row as counted
             }
+
             // Check column
-            if (this->board[0][i] == 'S' && this->board[1][i] == 'U' && this->board[2][i] == 'S') {
-                this->n_moves % 2 == 0 ? player1Points++ : player2Points++;
-                player_count++;
+            if (!countedCols[i] && this->board[0][i] == 'S' && this->board[1][i] == 'U' && this->board[2][i] == 'S') {
+                if (this->n_moves % 2 == 0) {
+                    player2Points++;
+                } else {
+                    player1Points++;
+                }
+                countedCols[i] = true; // Mark column as counted
             }
         }
 
         // Check diagonals
-        if ((this->board[0][0] == 'S' && this->board[1][1] == 'U' && this->board[2][2] == 'S') ||
-            (this->board[0][2] == 'S' && this->board[1][1] == 'U' && this->board[2][0] == 'S')) {
-            this->n_moves % 2 == 0 ? player1Points++ : player2Points++;
-            player_count++;
+        if (!countedDiagonals[0] && this->board[0][0] == 'S' && this->board[1][1] == 'U' && this->board[2][2] == 'S') {
+            if (this->n_moves % 2 == 0) {
+                player2Points++;
+            } else {
+                player1Points++;
+            }
+            countedDiagonals[0] = true; // Mark diagonal as counted
         }
-        return player_count;
+        if (!countedDiagonals[1] && this->board[0][2] == 'S' && this->board[1][1] == 'U' && this->board[2][0] == 'S') {
+            if (this->n_moves % 2 == 0) {
+                player2Points++;
+            } else {
+                player1Points++;
+            }
+            countedDiagonals[1] = true; // Mark diagonal as counted
+        }
+
     }
 
 
-    bool is_win() override {
+    bool is_win() override{
+        SUS_count();
 
-        if(this-> n_moves == 9) {
-            int count_p1 = playerCounter('S');
-            int count_p2 = playerCounter('U');
-
-            if (count_p1 > count_p2 ) {
-                // Access and update player names
-                *globalPlayers_ttt[1] = *globalPlayers_ttt[0];  // This copies the entire player object
+        // Determine game end condition
+        if (this->n_moves == 9) {
+            if (player1Points > player2Points) {
+                *globalPlayers_SUS[1] = *globalPlayers_SUS[0];
                 return true;
             }
-            else if(count_p1 < count_p2){
+            else if(player1Points < player2Points){
+                *globalPlayers_SUS[0] = *globalPlayers_SUS[1];
                 return true;
             }
 
         }
-
         return false;
     }
 

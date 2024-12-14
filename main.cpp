@@ -111,7 +111,7 @@ GameSetup<T> choosePlayer(Board<T>* board, T symbol1, T symbol2, int gameType) {
                 break;
             }
             case 9:{
-                player1 = new SUS_Random_Player<T>('X');
+                player1 = new SUS_Random_Player<T>('S');
             }
         }
     }
@@ -202,7 +202,7 @@ GameSetup<T> choosePlayer(Board<T>* board, T symbol1, T symbol2, int gameType) {
                 break;
             }
             case 9:{
-                player2 = new SUS_Random_Player<T>('O');
+                player2 = new SUS_Random_Player<T>('U');
                 break;
             }
         }
@@ -338,16 +338,19 @@ int main() {
                 break;
             }
             case 9:{
-              /*  auto* board = new SUS_Board<char>();
+              auto* board = new SUS_Board<char>();
 
-                GameSetup<char> setup = choosePlayer<char>(board, 'S', 'U', 8);
+                GameSetup<char> setup = choosePlayer<char>(board, 'S', 'U', 9);
 
                 GameManager<char> game(setup.board, setup.players);
+                globalPlayers_SUS[0] = setup.players[0];
+                globalPlayers_SUS[1] = setup.players[1];
                 game.run();
 
                 deletePlayers(setup);
                 cout << "_______________________________________________________";
-                break;*/
+
+                break;
             }
             default:
                 cerr << "Invalid choice! Please select a valid option.\n";
