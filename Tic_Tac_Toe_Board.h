@@ -144,7 +144,7 @@ public:
     }
 
     bool game_is_over() override{
-       return is_win() || is_draw();
+        return is_win() || is_draw();
 
     }
 

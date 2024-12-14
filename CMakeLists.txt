@@ -5,7 +5,6 @@ set(CMAKE_CXX_STANDARD 23)
 
 add_executable(board_games
         BoardGame_Classes.h
-        MinMaxPlayer.h
         Pyramid_TicTacToe.h
         Word_TicTacTtoe.h
         FourInRow.h
