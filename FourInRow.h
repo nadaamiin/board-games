@@ -5,7 +5,7 @@
 #include <iomanip>
 #include <cctype>
 using namespace std;
-static bool isAI2 = false;
+static bool isRandom2 = false;
 
 template <typename T>
 class Connect_Four_Board:public Board<T> {
@@ -31,7 +31,7 @@ public:
     bool update_board(int x, int y, T symbol) override {
         // Check if the column is valid
         if (y < 0 || y >= this->columns) {
-            if(!isAI2){
+            if(!isRandom2){
                 cerr << "Invalid column! \n";
             }
             return false;
@@ -51,7 +51,7 @@ public:
         }
 
         // If no empty spot is found
-        if(!isAI2){
+        if(!isRandom2){
             cerr << "Column is full! \n";
         }
         return false;

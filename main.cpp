@@ -11,6 +11,7 @@
 #include "Misere_Tic_Tac_Toe.h"
 #include "Ultimate_TTT.h"
 #include "Tic_Tac_Toe_Board.h"
+#include "SUS.h"
 
 using namespace std;
 
@@ -68,6 +69,10 @@ GameSetup<T> choosePlayer(Board<T>* board, T symbol1, T symbol2, int gameType) {
                 player1 = new Ultimate_player<T>(player1_name,symbol1);
                 break;
             }
+            case 9:{
+                player1 = new SUS_Player<T>(player1_name,symbol1);
+                break;
+            }
         }
     } else if (player1Type == 2) {
         switch (gameType) {
@@ -104,6 +109,9 @@ GameSetup<T> choosePlayer(Board<T>* board, T symbol1, T symbol2, int gameType) {
                 p1_israndom = true;
                 player1 = new RandomComputerPlayer_Ultimate<T>('X');
                 break;
+            }
+            case 9:{
+                player1 = new SUS_Random_Player<T>('X');
             }
         }
     }
@@ -152,6 +160,10 @@ GameSetup<T> choosePlayer(Board<T>* board, T symbol1, T symbol2, int gameType) {
                 player2 = new Ultimate_player<T>(player2_name,symbol2);
                 break;
             }
+            case 9:{
+                player2 = new SUS_Player<T>(player2_name,symbol2);
+                break;
+            }
         }
     } else if (player2Type == 2) {
         switch (gameType) {
@@ -189,6 +201,10 @@ GameSetup<T> choosePlayer(Board<T>* board, T symbol1, T symbol2, int gameType) {
                 player2 = new RandomComputerPlayer_Ultimate<T>('O');
                 break;
             }
+            case 9:{
+                player2 = new SUS_Random_Player<T>('O');
+                break;
+            }
         }
     }
     else {
@@ -216,7 +232,8 @@ int main() {
 
         int choice;
         cout << "\nChoose a game:\n1. Pyramid Tic Tac Toe\n2. Connect Four\n3. 5*5 Tic Tac Toe\n4. Word Tic Tac Toe"
-                "\n5. Numerical Tic Tac Toe \n6. Misere Tic Tac Toe\n7. 4*4 Tic Tac Toe\n8. Ultimate Tic Tac Toe\n0. Exit\n";
+                "\n5. Numerical Tic Tac Toe \n6. Misere Tic Tac Toe\n"
+                "7. 4*4 Tic Tac Toe\n8. Ultimate Tic Tac Toe\n9. SUS\n0. Exit\n";
         cin >> choice;
 
         switch (choice) {
@@ -319,6 +336,18 @@ int main() {
                 deletePlayers(setup);
                 cout << "_______________________________________________________";
                 break;
+            }
+            case 9:{
+              /*  auto* board = new SUS_Board<char>();
+
+                GameSetup<char> setup = choosePlayer<char>(board, 'S', 'U', 8);
+
+                GameManager<char> game(setup.board, setup.players);
+                game.run();
+
+                deletePlayers(setup);
+                cout << "_______________________________________________________";
+                break;*/
             }
             default:
                 cerr << "Invalid choice! Please select a valid option.\n";
