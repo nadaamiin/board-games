@@ -16,4 +16,5 @@ add_executable(board_games
         Misere_Tic_Tac_Toe.h
         Pyramid_AI.h
         Pyramid_AI.h
+        WordGame_AI.h
 )
