@@ -6,6 +6,10 @@
 #include <vector>
 #include "BoardGame_Classes.h"
 
+static bool p1_israndom = false;
+static bool p2_israndom = false;
+
+
 using namespace std;
 
 template <typename T>
@@ -139,8 +143,6 @@ class Ultimate_TTT : public Board<T> {
 private:
     vector<vector<Sub_boards<T>>> sub_board;
 public:
-    static bool p1_israndom;
-    static bool p2_israndom;
 
     Ultimate_TTT() : sub_board(3, vector<Sub_boards<T>>(3)){
         this->rows = 3;
@@ -179,6 +181,7 @@ public:
     bool update_board(int x, int y, T symbol) override{
         // determine which player turn
         bool isPlayer1 = (symbol == 'X'); // Assuming 'X' is Player 1 and 'O' is Player 2
+
         // Validate that x and y are within the main board
         if (x < 0 || x >= 3 || y < 0 || y >= 3) {
             // print error messages only if human player
@@ -216,7 +219,6 @@ public:
                 break;
             } else {
                 // Human player turn
-                //cout << "Player " << (isPlayer1 ? 1 : 2) << " (Human) turn." << endl;
                 cout << "Enter the number of the box you want to play in (1-9): ";
                 cin >> index;
 
@@ -287,13 +289,6 @@ public:
 
 };
 
-// initialize the static variable random
-template <typename T>
-bool Ultimate_TTT<T>:: p1_israndom = false;
-template <typename T>
-bool Ultimate_TTT<T>:: p2_israndom = false;
-
-
 template <typename T>
 class Ultimate_player : public Player<T>{
 public:
@@ -307,10 +302,10 @@ public:
 
 // Random Computer Player Template
 template <typename T>
-class RandomComputerPlayer : public RandomPlayer<T> {
+class RandomComputerPlayer_Ultimate : public RandomPlayer<T> {
 public:
     // Constructor
-    RandomComputerPlayer(T symbol) : RandomPlayer<T>(symbol) {
+    RandomComputerPlayer_Ultimate(T symbol) : RandomPlayer<T>(symbol) {
         this->dimension = 3;
         this->name = "Random Computer Player";
         srand(static_cast<unsigned int>(time(0)));   // Seed the random number generator

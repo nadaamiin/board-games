@@ -5,7 +5,7 @@
 #include <random>
 #include <ctime>
 
-Player<char>* globalPlayers[2];
+Player<char>* globalPlayers_ttt[2];
 
 template <typename T>
 class Tic_Tac_Toe_Board  : public Board<char>{
@@ -33,8 +33,8 @@ public:
         }
         delete[] this->board;
 
-        globalPlayers[0] = nullptr;
-        globalPlayers[1] = nullptr;
+        globalPlayers_ttt[0] = nullptr;
+        globalPlayers_ttt[1] = nullptr;
 
     }
 
@@ -125,13 +125,11 @@ public:
             int count_p2 = playerCount('O');
 
             if (count_p1 > count_p2 ) {
-                cout<<  "player 1 wins!" << endl;
                 // Access and update player names
-                *globalPlayers[1] = *globalPlayers[0];  // This copies the entire player object
+                *globalPlayers_ttt[1] = *globalPlayers_ttt[0];  // This copies the entire player object
                 return true;
             }
             else if(count_p1 < count_p2){
-                cout<< "Player 2 is the Winner!" << endl;
                 return true;
             }
 
@@ -155,21 +153,16 @@ public:
 
 
 template <typename T>
-class HumanPlayer : public Player<char> {
+class TTT_Player : public Player<T> {
 public:
     // Constructor using parent class constructors
-    HumanPlayer(string name, char symbol) : Player<char>(name, symbol) {}
+    TTT_Player(string name, T symbol) : Player<T>(name, symbol) {}
 
     // Implement getmove method to get user input
     void getmove(int& x, int& y) override {
         cout << this->name << ", enter your move (row [0-4] col [0-4]): ";
         cin >> x >> y;
 
-    }
-
-    // Helper method to set the name
-    void setName(const string& newName) {
-        this->name = newName;
     }
 
 };
