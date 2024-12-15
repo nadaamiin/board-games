@@ -44,8 +44,22 @@ public:
             (x == 2 && y >= 0 && y <= 4)) &&
            (this->board[x][y] != 'X' && this->board[x][y] != 'O' || symbol == 0)){
             if (symbol == 0){
+                // Undo moves if the player enters the wrong box
                 this->n_moves--;
-                this->board[x][y] = ' ';
+
+                int count = 0;
+                if (x == 0 && y == 2) count = 1;
+                else if (x == 1 && y == 1) count = 2;
+                else if (x == 1 && y == 2) count = 3;
+                else if (x == 1 && y == 3) count = 4;
+                else if (x == 2 && y == 0) count = 5;
+                else if (x == 2 && y == 1) count = 6;
+                else if (x == 2 && y == 2) count = 7;
+                else if (x == 2 && y == 3) count = 8;
+                else if (x == 2 && y == 4) count = 9;
+
+                // Initialize the board again with the count
+                this->board[x][y] = '0' + count;
             }
             else {
                 this->n_moves++;

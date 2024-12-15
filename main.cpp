@@ -12,6 +12,7 @@
 #include "Ultimate_TTT.h"
 #include "Tic_Tac_Toe_Board.h"
 #include "SUS.h"
+#include "Pyramid_AI.h"
 
 using namespace std;
 
@@ -76,45 +77,55 @@ GameSetup<T> choosePlayer(Board<T>* board, T symbol1, T symbol2, int gameType) {
         }
     } else if (player1Type == 2) {
         switch (gameType) {
-            case 1:{
+            case 1: {
                 player1 = new Pyramid_randomPlayer<T>(symbol1);
                 break;
             }
-            case 2:{
+            case 2: {
                 player1 = new Connect_Four_Random_Player<T>('X');
                 break;
             }
-            case 3:{
-                player1 =  new RandomComputerPlayer<T>('X');
+            case 3: {
+                player1 = new RandomComputerPlayer<T>('X');
                 break;
             }
-            case 4:{
+            case 4: {
                 player1 = new Word_randomPlayer(symbol1);
                 break;
             }
-            case 5:{
+            case 5: {
                 player1 = new Numerical_TicTacToe_Random_Player<T>(symbol1);
                 break;
             }
-            case 6:{
+            case 6: {
                 player1 = new Misere_Random_Player<T>(symbol1);
                 break;
             }
-            case 7:{
+            case 7: {
                 player1 = new TicTacToe4x4_Random_Player<T>('X');
                 player1Random = true;
                 break;
             }
-            case 8:{
+            case 8: {
                 p1_israndom = true;
                 player1 = new RandomComputerPlayer_Ultimate<T>('X');
                 break;
             }
-            case 9:{
+            case 9: {
                 player1 = new SUS_Random_Player<T>('S');
+                break;
+            }
+        }
+    }else if (player1Type == 3) {
+        switch (gameType) {
+            case 1: {
+                player1 = new Pyramid_MinMax_Player<T>('X');
+                player1->setBoard(board);
+                break;
             }
         }
     }
+
     // Choose Player 2 type
     cout << "Choose the type of Player 2:\n1. Human Player\n2. Random Player\n3. AI Player\n";
     int player2Type;
@@ -207,6 +218,15 @@ GameSetup<T> choosePlayer(Board<T>* board, T symbol1, T symbol2, int gameType) {
             }
         }
     }
+    else if (player2Type == 3) {
+        switch (gameType) {
+            case 1: {
+                player2 = new Pyramid_MinMax_Player<T>('O');
+                player2->setBoard(board);
+                break;
+            }
+        }
+    }
     else {
         throw invalid_argument("Invalid player type!");
     }
@@ -245,6 +265,7 @@ int main() {
                 auto* board = new PyramidTicTacToe<char>();
                 GameSetup<char> setup = choosePlayer<char>(board, 'X', 'O', 1);
 
+                cout << "---> Pyramid tic tac toe\n----------------------------\n";
                 GameManager<char> game(setup.board, setup.players);
                 game.run();
 
