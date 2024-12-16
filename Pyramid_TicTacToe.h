@@ -7,7 +7,6 @@
 
 using namespace std;
 
-bool isRandom0 = false;
 template <typename T>
 class PyramidTicTacToe : public Board<T> {
 public:
@@ -37,6 +36,7 @@ public:
 
 
 // ---------------Implementation
+static bool isRandom0 = false;
 
 template <typename T>
 PyramidTicTacToe<T>::PyramidTicTacToe() {
@@ -91,7 +91,7 @@ bool PyramidTicTacToe<T>::update_board(int x, int y, T symbol) {
             this->n_moves++;
             this->board[x][y] = toupper(symbol);
         }
-        if(isRandom0) {
+        if(isRandom0 && !game_is_over()) {
             cout << "--> Random player adds in (" << count << ')' << endl;
         }
         return true;
@@ -134,6 +134,7 @@ Pyramid_player<T>::Pyramid_player(string name, T symbol) : Player<T>(name, symbo
 
 template <typename T>
 void Pyramid_player<T>::getmove(int& x, int& y) {
+    isRandom0 = false;
     int index;
     cout << "--> (" << this->getname() << ')';
     cout << " Enter the index of box you want to add in:";

@@ -267,7 +267,7 @@ int main() {
                 auto* board = new PyramidTicTacToe<char>();
                 GameSetup<char> setup = choosePlayer<char>(board, 'X', 'O', 1, "3. AI player\n");
 
-                cout << "---> Pyramid tic tac toe\n----------------------------\n";
+                cout << "     Pyramid tic tac toe\n----------------------------\n";
                 GameManager<char> game(setup.board, setup.players);
                 game.run();
 
@@ -300,6 +300,7 @@ int main() {
                 break;
             }
             case 4:{
+                cout << "     Word tic tac toe\n----------------------------\n";
                 auto* board = new WordTicTacToe<char>();
                 GameSetup<char> setup = choosePlayer<char>(board, 'X', 'O', 4);
 
