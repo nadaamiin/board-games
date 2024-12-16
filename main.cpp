@@ -311,8 +311,9 @@ int main() {
                 break;
             }
             case 5: {
-                auto* board = new Numerical_TicTacToe_Board<int>();
+                cout << "\nPlayer-1 playes with odd numbers (1,3,5,7,9)\nPlayer-2 playes with even numbers (2,4,6,8)\n\n";
 
+                auto* board = new Numerical_TicTacToe_Board<int>();
                 GameSetup<int> setup = choosePlayer<int>(board, 1, 2, 5);
 
                 GameManager<int> game(setup.board, setup.players);
