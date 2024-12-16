@@ -1,5 +1,5 @@
-#ifndef BOARD_GAMES_WORD_TICTACTTOE_H
-#define BOARD_GAMES_WORD_TICTACTTOE_H
+#ifndef BOARD_GAMES_WORD_TICTACTOE_H
+#define BOARD_GAMES_WORD_TICTACTOE_H
 
 #include <iostream>
 #include <iomanip>
@@ -178,4 +178,4 @@ public:
 
 
 
-#endif //BOARD_GAMES_WORD_TICTACTTOE_H
+#endif //BOARD_GAMES_WORD_TICTACTOE_H

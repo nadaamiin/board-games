@@ -6,7 +6,7 @@
 #include "FourInRow.h"
 #include "NumericalTicTacToe.h"
 #include "BoardGame_Classes.h"
-#include "Word_TicTacTtoe.h"
+#include "Word_TicTacToe.h"
 #include "4x4TicTacToe.h"
 #include "Misere_Tic_Tac_Toe.h"
 #include "Ultimate_TTT.h"
@@ -24,9 +24,10 @@ struct GameSetup {
 };
 
 template <typename T>
-GameSetup<T> choosePlayer(Board<T>* board, T symbol1, T symbol2, int gameType) {
+GameSetup<T> choosePlayer(Board<T>* board, T symbol1, T symbol2, int gameType, string txt = "") {
     // Choose Player 1 type
-    cout << "Choose the type of Player 1:\n1. Human Player\n2. Random Player\n3. AI Player\n";
+    cout << "Choose the type of Player 1:\n1. Human Player\n2. Random Player\n";
+    cout << txt;
     int player1Type;
     cin >> player1Type;
 
@@ -127,7 +128,8 @@ GameSetup<T> choosePlayer(Board<T>* board, T symbol1, T symbol2, int gameType) {
     }
 
     // Choose Player 2 type
-    cout << "Choose the type of Player 2:\n1. Human Player\n2. Random Player\n3. AI Player\n";
+    cout << "Choose the type of Player 2:\n1. Human Player\n2. Random Player\n";
+    cout << txt;
     int player2Type;
     cin >> player2Type;
 
@@ -263,7 +265,7 @@ int main() {
 
             case 1:{
                 auto* board = new PyramidTicTacToe<char>();
-                GameSetup<char> setup = choosePlayer<char>(board, 'X', 'O', 1);
+                GameSetup<char> setup = choosePlayer<char>(board, 'X', 'O', 1, "3. AI player\n");
 
                 cout << "---> Pyramid tic tac toe\n----------------------------\n";
                 GameManager<char> game(setup.board, setup.players);
