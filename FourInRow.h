@@ -155,6 +155,7 @@ Connect_Four_Player<T>::Connect_Four_Player(string name, T symbol) : Player<T>(n
 
 template <typename T>
 Connect_Four_Random_Player<T>::Connect_Four_Random_Player(T symbol) : RandomPlayer<T>(symbol) {
+    isRandom2 = true;
     this->dimension = 6;
     this->name = "Random Computer Player";
     srand(static_cast<unsigned int>(time(0)));
