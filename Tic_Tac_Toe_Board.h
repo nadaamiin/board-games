@@ -24,6 +24,7 @@ public:
                 board[i][j] = ' ';
             }
         }
+        cout << endl;
     }
 
     // Destructor to free dynamically allocated memory
